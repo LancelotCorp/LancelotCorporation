@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LancelotCorporation — Automatisation IA</title>
+
+<meta name="description" content="Agence IA premium spécialisée en automatisation, chatbots et systèmes intelligents pour entreprises.">
+<meta name="keywords" content="IA, automatisation, chatbot IA, agence IA, intelligence artificielle">
+<meta property="og:title" content="LancelotCorporation">
+<meta property="og:description" content="Automatisation IA premium pour entreprises.">
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0d0b08;
+  --warm-dark: #141210;
+  --warm-card: #1c1915;
+  --warm-card2: #231f1b;
+  --gold: #d4a843;
+  --gold-light: #f0c96a;
+  --gold-dim: rgba(212,168,67,0.12);
+  --amber: #e8832a;
+  --cream: #f5ede0;
+  --cream-dim: rgba(245,237,224,0.75);
+  --muted: #8a7e70;
+  --border: rgba(212,168,67,0.15);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--cream);font-family:'Plus Jakarta Sans',sans-serif;font-weight:300;overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+.cursor{position:fixed;z-index:9999;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width .3s,height .3s;mix-blend-mode:difference}
+.cursor-ring{position:fixed;z-index:9998;width:38px;height:38px;border:1px solid rgba(212,168,67,0.5);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:all .12s ease}
+
+/* NOISE */
+body::after{content:'';position:fixed;inset:0;z-index:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;opacity:.5}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(13,11,8,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Playfair Display',serif;font-weight:900;font-size:1.25rem;color:var(--cream)}
+.nav-logo span{color:var(--gold)}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.8rem;letter-spacing:.07em;text-transform:uppercase;transition:color .3s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .3s}
+.nav-links a:hover{color:var(--gold)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-lang{display:flex;gap:.4rem}
+.lang-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:.3rem .7rem;font-size:.72rem;cursor:none;border-radius:3px;font-family:'Plus Jakarta Sans',sans-serif;transition:all .25s;letter-spacing:.05em}
+.lang-btn.active,.lang-btn:hover{background:var(--gold);color:var(--black);border-color:var(--gold)}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:8rem 4rem 6rem;position:relative;overflow:hidden;gap:4rem;z-index:1}
+.hero-glow{position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(212,168,67,.07) 0%,rgba(232,131,42,.04) 40%,transparent 70%);top:-150px;right:-150px;border-radius:50%;animation:breathe 7s ease-in-out infinite;pointer-events:none}
+.hero-glow2{position:absolute;width:350px;height:350px;background:radial-gradient(circle,rgba(232,131,42,.05) 0%,transparent 70%);bottom:100px;left:0;border-radius:50%;animation:breathe 9s ease-in-out infinite reverse;pointer-events:none}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.12);opacity:.7}}
+
+.hero-content{position:relative;z-index:2}
+.hero-tag{display:inline-flex;align-items:center;gap:.6rem;background:var(--gold-dim);border:1px solid rgba(212,168,67,.25);padding:.5rem 1.2rem;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem;border-radius:100px;animation:fadeUp .7s ease both}
+.hero-tag .dot{width:7px;height:7px;background:var(--gold);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+h1{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,5.5vw,4.8rem);font-weight:900;line-height:1.06;letter-spacing:-.02em;margin-bottom:1.5rem;animation:fadeUp .7s .1s ease both}
+h1 em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:1.05rem;color:var(--muted);line-height:1.8;margin-bottom:2.5rem;max-width:440px;animation:fadeUp .7s .2s ease both}
+.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp .7s .3s ease both}
+.btn-primary{background:linear-gradient(135deg,var(--gold),var(--amber));color:var(--black);padding:.9rem 2.2rem;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:.88rem;border:none;cursor:none;text-decoration:none;display:inline-block;border-radius:8px;transition:all .3s;box-shadow:0 4px 20px rgba(212,168,67,.3)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(212,168,67,.45)}
+.btn-secondary{background:transparent;color:var(--cream-dim);padding:.9rem 2.2rem;font-family:'Plus Jakarta Sans',sans-serif;font-size:.88rem;border:1px solid rgba(245,237,224,.12);cursor:none;text-decoration:none;display:inline-block;border-radius:8px;transition:all .3s}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-3px)}
+
+/* HERO VISUAL */
+.hero-visual{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;animation:fadeUp .7s .4s ease both}
+.orb-outer{width:400px;height:400px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(212,168,67,.12),rgba(232,131,42,.05) 50%,transparent 70%);border:1px solid rgba(212,168,67,.1);display:flex;align-items:center;justify-content:center;position:relative;animation:spin 25s linear infinite}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.orb-dot{position:absolute;width:12px;height:12px;background:var(--gold);border-radius:50%;box-shadow:0 0 20px rgba(212,168,67,.9)}
+.orb-dot:nth-child(1){top:8px;left:50%;transform:translateX(-50%)}
+.orb-dot:nth-child(2){bottom:8px;right:22%}
+.orb-dot:nth-child(3){left:8px;top:50%;transform:translateY(-50%)}
+.orb-inner{width:260px;height:260px;border-radius:50%;background:radial-gradient(circle at 40% 40%,rgba(212,168,67,.12),rgba(13,11,8,.85));border:1px solid rgba(212,168,67,.2);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.4rem;animation:spin 25s linear infinite reverse}
+.orb-emoji{font-size:3.5rem;animation:spin 25s linear infinite}
+.orb-label{font-family:'Playfair Display',serif;font-size:.75rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;animation:spin 25s linear infinite}
+
+/* HERO STATS */
+.hero-stats{position:absolute;bottom:2rem;left:4rem;right:4rem;display:flex;gap:0;background:var(--warm-card);border:1px solid var(--border);border-radius:14px;overflow:hidden;animation:fadeUp .7s .5s ease both;z-index:2}
+.stat{flex:1;padding:1.3rem 1.5rem;text-align:center;border-right:1px solid var(--border);transition:background .3s}
+.stat:last-child{border-right:none}
+.stat:hover{background:var(--warm-card2)}
+.stat-num{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;color:var(--gold);display:block}
+.stat-label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:.2rem}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTIONS */
+section{padding:7rem 4rem;position:relative;z-index:1}
+.section-label{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:flex;align-items:center;gap:.8rem}
+.section-label::before{content:'';width:28px;height:1px;background:var(--gold);opacity:.5}
+h2{font-family:'Playfair Display',serif;font-size:clamp(1.9rem,4vw,2.9rem);font-weight:900;line-height:1.1;margin-bottom:1rem;letter-spacing:-.02em}
+h2 em{font-style:italic;color:var(--gold)}
+
+/* SERVICES */
+#services{background:var(--warm-dark)}
+#services::before{content:'';position:absolute;top:-50px;left:0;right:0;height:80px;background:var(--warm-dark);clip-path:polygon(0 100%,100% 0,100% 100%);z-index:0}
+.services-intro{max-width:540px;margin-bottom:4rem}
+.services-intro p{color:var(--muted);line-height:1.85;margin-top:1rem;font-size:.98rem}
+.services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
+.service-card{background:var(--warm-card);padding:2.5rem;border-radius:18px;border:1px solid var(--border);transition:all .4s ease;position:relative;overflow:hidden}
+.service-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 0% 0%,rgba(212,168,67,.07),transparent 60%);opacity:0;transition:opacity .4s}
+.service-card:hover{transform:translateY(-7px);border-color:rgba(212,168,67,.4);box-shadow:0 24px 60px rgba(0,0,0,.45)}
+.service-card:hover::before{opacity:1}
+.service-icon-wrap{width:54px;height:54px;background:var(--gold-dim);border:1px solid rgba(212,168,67,.2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:1.4rem;transition:transform .3s}
+.service-card:hover .service-icon-wrap{transform:scale(1.1) rotate(-6deg)}
+.service-card h3{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;margin-bottom:.8rem;color:var(--cream)}
+.service-card p{color:var(--muted);font-size:.88rem;line-height:1.8}
+.service-tag{display:inline-block;margin-top:1.2rem;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(212,168,67,.25);padding:.25rem .75rem;border-radius:100px}
+
+/* PROCESS */
+#process{background:var(--black)}
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:4rem;position:relative}
+.process-grid::before{content:'';position:absolute;top:2.4rem;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,rgba(212,168,67,.4),transparent)}
+.process-step{padding:2rem 1.5rem;text-align:center}
+.process-num{width:48px;height:48px;background:var(--gold-dim);border:1px solid rgba(212,168,67,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:1.1rem;color:var(--gold);margin:0 auto 1.4rem;position:relative;z-index:1;transition:all .3s}
+.process-step:hover .process-num{background:var(--gold);color:var(--black);transform:scale(1.1)}
+.process-step h3{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:.6rem;color:var(--cream)}
+.process-step p{font-size:.84rem;color:var(--muted);line-height:1.75}
+
+/* TESTIMONIALS */
+#temoignages{background:var(--warm-dark)}
+#temoignages::before{content:'';position:absolute;top:-50px;left:0;right:0;height:80px;background:var(--warm-dark);clip-path:polygon(0 0,100% 100%,0 100%);z-index:0}
+.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:4rem}
+.testimonial-card{background:var(--warm-card);padding:2.2rem;border-radius:18px;border:1px solid var(--border);transition:all .3s;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:220px;border-style:dashed}
+.testimonial-card:hover{border-color:rgba(212,168,67,.35);transform:translateY(-5px);border-style:solid}
+.t-icon{font-size:2.5rem;margin-bottom:1rem}
+.t-text{color:var(--muted);font-size:.88rem;line-height:1.75;margin-bottom:1.2rem}
+.t-text strong{color:var(--gold)}
+.t-cta{background:linear-gradient(135deg,var(--gold),var(--amber));color:var(--black);padding:.6rem 1.4rem;border-radius:8px;font-size:.8rem;font-weight:600;text-decoration:none;display:inline-block;transition:all .3s}
+.t-cta:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(212,168,67,.35)}
+
+/* CONTACT */
+#contact{background:var(--black)}
+.contact-inner{display:grid;grid-template-columns:1fr 1.2fr;gap:5rem;align-items:start}
+.contact-info p{color:var(--muted);line-height:1.85;margin-top:1rem;margin-bottom:2.5rem;font-size:.98rem}
+.contact-perks{display:flex;flex-direction:column;gap:1rem}
+.perk{display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;background:var(--warm-card);border:1px solid var(--border);border-radius:12px;transition:all .3s}
+.perk:hover{border-color:rgba(212,168,67,.3);background:var(--warm-card2)}
+.perk-icon{font-size:1.2rem;width:40px;height:40px;background:var(--gold-dim);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.perk-text{font-size:.86rem;color:var(--muted)}
+.perk-text strong{color:var(--cream);display:block;margin-bottom:.1rem;font-size:.9rem}
+.contact-form-wrap{background:var(--warm-card);border:1px solid var(--border);border-radius:20px;padding:2.5rem}
+.contact-form{display:flex;flex-direction:column;gap:1.2rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{display:flex;flex-direction:column;gap:.5rem}
+.form-group label{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.form-group input,.form-group textarea,.form-group select{background:var(--black);border:1px solid rgba(245,237,224,.08);color:var(--cream);padding:.85rem 1rem;font-family:'Plus Jakarta Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color .3s;width:100%;border-radius:8px}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--gold)}
+.form-group select option{background:var(--black)}
+.form-group textarea{resize:vertical;min-height:110px}
+.form-submit{background:linear-gradient(135deg,var(--gold),var(--amber));color:var(--black);padding:1rem 2rem;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:.95rem;cursor:none;transition:all .3s;border-radius:8px;box-shadow:0 4px 20px rgba(212,168,67,.25)}
+.form-submit:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(212,168,67,.4)}
+
+/* FOOTER */
+footer{background:var(--warm-dark);border-top:1px solid var(--border);padding:2rem 4rem;display:flex;align-items:center;justify-content:space-between;z-index:1;position:relative}
+.footer-logo{font-family:'Playfair Display',serif;font-weight:900;font-size:1.1rem;color:var(--cream)}
+.footer-logo span{color:var(--gold)}
+footer p{font-size:.76rem;color:var(--muted)}
+
+/* LANG */
+.lang-en{display:none}
+body.en .lang-fr{display:none}
+body.en .lang-en{display:block}
+span.lang-en{display:none}
+body.en span.lang-en{display:inline}
+body.en span.lang-fr{display:none}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(32px);transition:all .75s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* CHATBOT */
+#chat-bubble{position:fixed;bottom:2rem;right:2rem;z-index:500;width:60px;height:60px;background:linear-gradient(135deg,var(--gold),var(--amber));border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:none;box-shadow:0 4px 30px rgba(212,168,67,.5);transition:transform .3s;font-size:1.5rem}
+#chat-bubble:hover{transform:scale(1.1)}
+#chat-bubble .notif{position:absolute;top:-3px;right:-3px;width:18px;height:18px;background:#e74c3c;border-radius:50%;font-size:.62rem;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;border:2px solid var(--black)}
+#chat-window{position:fixed;bottom:5.5rem;right:2rem;z-index:499;width:370px;height:530px;background:var(--warm-card);border:1px solid rgba(212,168,67,.2);border-radius:20px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+#chat-window.open{display:flex;animation:slideUp .35s cubic-bezier(.16,1,.3,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.chat-header{background:linear-gradient(135deg,var(--gold),var(--amber));padding:1rem 1.2rem;display:flex;align-items:center;gap:.8rem}
+.chat-avatar{width:38px;height:38px;background:rgba(0,0,0,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.chat-header-name{font-family:'Playfair Display',serif;font-weight:700;font-size:.95rem;color:var(--black)}
+.chat-header-status{font-size:.68rem;color:rgba(0,0,0,.6);display:flex;align-items:center;gap:.3rem}
+.chat-header-status::before{content:'';width:6px;height:6px;background:#2d6a4f;border-radius:50%;display:inline-block}
+.chat-close{background:rgba(0,0,0,.15);border:none;color:var(--black);cursor:none;font-size:.9rem;padding:.3rem .5rem;border-radius:6px;margin-left:auto;transition:background .2s}
+.chat-close:hover{background:rgba(0,0,0,.25)}
+.chat-messages{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.8rem;scrollbar-width:thin;scrollbar-color:rgba(212,168,67,.2) transparent}
+.msg{max-width:85%;padding:.75rem 1rem;border-radius:14px;font-size:.84rem;line-height:1.55;animation:msgIn .25s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.msg.bot{background:var(--warm-card2);color:var(--cream);border-bottom-left-radius:4px;align-self:flex-start;border:1px solid var(--border)}
+.msg.user{background:linear-gradient(135deg,var(--gold),var(--amber));color:var(--black);border-bottom-right-radius:4px;align-self:flex-end;font-weight:500}
+.msg.typing{background:var(--warm-card2);align-self:flex-start;border:1px solid var(--border)}
+.typing-dots{display:flex;gap:4px;align-items:center}
+.typing-dots span{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:dot 1.2s infinite;opacity:.4}
+.typing-dots span:nth-child(2){animation-delay:.2s}.typing-dots span:nth-child(3){animation-delay:.4s}
+@keyframes dot{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
+.chat-suggestions{padding:.5rem 1rem;display:flex;flex-wrap:wrap;gap:.4rem}
+.suggestion{background:var(--gold-dim);border:1px solid rgba(212,168,67,.25);color:var(--gold);padding:.35rem .8rem;border-radius:20px;font-size:.72rem;cursor:none;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif}
+.suggestion:hover{background:var(--gold);color:var(--black)}
+.chat-input-area{padding:.8rem 1rem;border-top:1px solid var(--border);display:flex;gap:.5rem}
+#chat-input{flex:1;background:var(--black);border:1px solid rgba(212,168,67,.15);color:var(--cream);padding:.65rem 1rem;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.84rem;outline:none;transition:border-color .2s}
+#chat-input:focus{border-color:var(--gold)}
+#chat-input::placeholder{color:var(--muted)}
+#chat-send{background:linear-gradient(135deg,var(--gold),var(--amber));color:var(--black);border:none;width:38px;height:38px;border-radius:10px;cursor:none;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+#chat-send:hover{transform:scale(1.05)}
+
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  .hero{grid-template-columns:1fr;padding:7rem 1.5rem 10rem}
+  .hero-visual{display:none}
+  .hero-stats{left:1.5rem;right:1.5rem}
+  .stat{padding:1rem .8rem}
+  section{padding:5rem 1.5rem}
+  .services-grid{grid-template-columns:1fr}
+  .process-grid{grid-template-columns:1fr 1fr}
+  .process-grid::before{display:none}
+  .testimonials-grid{grid-template-columns:1fr}
+  .contact-inner{grid-template-columns:1fr;gap:3rem}
+  .form-row{grid-template-columns:1fr}
+  footer{flex-direction:column;gap:1rem;text-align:center;padding:2rem 1.5rem}
+  #chat-window{width:calc(100vw - 3rem);right:1.5rem}
+}
+
+@media(max-width:768px){
+  nav{padding:1rem 1.2rem!important}
+  h1{font-size:2.7rem!important}
+  h2{font-size:2rem!important}
+  section{padding:4rem 1.2rem!important}
+}
+
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <div class="nav-logo">Lancelot<span>Corp</span></div>
+  <ul class="nav-links">
+    <li><a href="#services"><span class="lang-fr">Services</span><span class="lang-en">Services</span></a></li>
+    <li><a href="#process"><span class="lang-fr">Comment ça marche</span><span class="lang-en">How it works</span></a></li>
+    <li><a href="#temoignages"><span class="lang-fr">Témoignages</span><span class="lang-en">Testimonials</span></a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-lang">
+    <button class="lang-btn active" onclick="setLang('fr')">FR</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-tag">
+      <div class="dot"></div>
+      <span class="lang-fr">Automatisation IA · Bots intelligents</span>
+      <span class="lang-en">AI Automation · Intelligent Bots</span>
+    </div>
+    <h1 class="lang-fr">L'IA qui travaille<br>à <em>votre place,</em><br>24h/24</h1>
+    <h1 class="lang-en">AI working<br><em>for you,</em><br>24/7</h1>
+    <p class="hero-sub lang-fr">Bots Telegram & WhatsApp, agents IA connectés à vos outils, automatisation sur mesure. Récupérez votre temps. Multipliez vos résultats.</p>
+    <p class="hero-sub lang-en">Telegram & WhatsApp bots, AI agents connected to your tools, custom automation. Reclaim your time. Multiply your results.</p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn-primary"><span class="lang-fr">Démarrer gratuitement →</span><span class="lang-en">Get started free →</span></a>
+      <a href="#services" class="btn-secondary"><span class="lang-fr">Voir nos solutions</span><span class="lang-en">See our solutions</span></a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="orb-outer">
+      <div class="orb-dot"></div>
+      <div class="orb-dot"></div>
+      <div class="orb-dot"></div>
+      <div class="orb-inner">
+        <div class="orb-emoji">🤖</div>
+        <div class="orb-label">Alice AI</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">24/7</span><span class="stat-label lang-fr">Disponibilité</span><span class="stat-label lang-en">Availability</span></div>
+    <div class="stat"><span class="stat-num">200h</span><span class="stat-label lang-fr">Économisées/mois</span><span class="stat-label lang-en">Saved/month</span></div>
+    <div class="stat"><span class="stat-num">1-2w</span><span class="stat-label lang-fr">Délai livraison</span><span class="stat-label lang-en">Delivery time</span></div>
+    <div class="stat"><span class="stat-num">0€</span><span class="stat-label lang-fr">Pour commencer</span><span class="stat-label lang-en">To start</span></div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-intro reveal">
+    <div class="section-label lang-fr">Nos Services</div>
+    <div class="section-label lang-en">Our Services</div>
+    <h2 class="lang-fr">Des solutions IA <em>concrètes</em><br>et rentables</h2>
+    <h2 class="lang-en">Concrete, <em>profitable</em><br>AI solutions</h2>
+    <p class="lang-fr">Chaque solution génère un retour sur investissement immédiat. Pas de technologie pour la technologie — uniquement ce qui vous fait gagner du temps et de l'argent.</p>
+    <p class="lang-en">Each solution generates immediate ROI. No tech for tech's sake — only what saves you time and money.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-icon-wrap">🤖</div>
+      <h3 class="lang-fr">Bots Telegram & WhatsApp</h3>
+      <h3 class="lang-en">Telegram & WhatsApp Bots</h3>
+      <p class="lang-fr">Des assistants intelligents qui répondent à vos clients à toute heure, traitent les demandes et automatisent vos processus sans intervention humaine.</p>
+      <p class="lang-en">Smart assistants that respond to clients at any hour, handle requests and automate your processes without human intervention.</p>
+      <div class="service-tag lang-fr">Disponible 24h/24</div>
+      <div class="service-tag lang-en">Available 24/7</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon-wrap">📅</div>
+      <h3 class="lang-fr">Agents IA connectés</h3>
+      <h3 class="lang-en">Connected AI Agents</h3>
+      <p class="lang-fr">Branchés sur vos emails, agenda Google et CRM. Ils lisent, analysent et agissent — vous ne recevez que l'essentiel.</p>
+      <p class="lang-en">Plugged into your emails, Google Calendar and CRM. They read, analyze and act — you only receive what matters.</p>
+      <div class="service-tag lang-fr">Connecté à vos outils</div>
+      <div class="service-tag lang-en">Connected to your tools</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon-wrap">⚡</div>
+      <h3 class="lang-fr">Automatisation de tâches</h3>
+      <h3 class="lang-en">Task Automation</h3>
+      <p class="lang-fr">Rapports, relances, saisies, synthèses — tout ce qui vous vole du temps est automatisé pour que vous puissiez vous concentrer sur l'essentiel.</p>
+      <p class="lang-en">Reports, follow-ups, data entry, summaries — everything that steals your time is automated so you focus on what matters.</p>
+      <div class="service-tag lang-fr">ROI immédiat</div>
+      <div class="service-tag lang-en">Immediate ROI</div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon-wrap">🎯</div>
+      <h3 class="lang-fr">Assistants personnels IA</h3>
+      <h3 class="lang-en">Personal AI Assistants</h3>
+      <p class="lang-fr">Un assistant qui vous envoie chaque matin un résumé personnalisé de vos emails, agenda et priorités — directement sur Telegram.</p>
+      <p class="lang-en">An assistant that sends you every morning a personalized summary of your emails, calendar and priorities — directly on Telegram.</p>
+      <div class="service-tag lang-fr">Sur mesure</div>
+      <div class="service-tag lang-en">Custom-built</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="reveal" style="max-width:540px">
+    <div class="section-label lang-fr">Comment ça marche</div>
+    <div class="section-label lang-en">How it works</div>
+    <h2 class="lang-fr">Opérationnel en <em>1 à 2 semaines</em></h2>
+    <h2 class="lang-en">Up and running in <em>1 to 2 weeks</em></h2>
+  </div>
+  <div class="process-grid">
+    <div class="process-step reveal">
+      <div class="process-num">1</div>
+      <h3 class="lang-fr">Audit gratuit</h3><h3 class="lang-en">Free audit</h3>
+      <p class="lang-fr">On analyse vos besoins et identifie les tâches à automatiser en priorité.</p>
+      <p class="lang-en">We analyze your needs and identify which tasks to automate first.</p>
+    </div>
+    <div class="process-step reveal">
+      <div class="process-num">2</div>
+      <h3 class="lang-fr">Proposition sur mesure</h3><h3 class="lang-en">Custom proposal</h3>
+      <p class="lang-fr">Vous recevez un plan concret avec les solutions adaptées à votre activité.</p>
+      <p class="lang-en">You receive a concrete plan with solutions adapted to your business.</p>
+    </div>
+    <div class="process-step reveal">
+      <div class="process-num">3</div>
+      <h3 class="lang-fr">Développement rapide</h3><h3 class="lang-en">Fast development</h3>
+      <p class="lang-fr">Nous construisons et testons votre solution en 1 à 2 semaines.</p>
+      <p class="lang-en">We build and test your solution in 1 to 2 weeks.</p>
+    </div>
+    <div class="process-step reveal">
+      <div class="process-num">4</div>
+      <h3 class="lang-fr">Déploiement & suivi</h3><h3 class="lang-en">Deployment & support</h3>
+      <p class="lang-fr">Mise en ligne et accompagnement continu pour maximiser les résultats.</p>
+      <p class="lang-en">Go live and ongoing support to maximize your results.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="temoignages">
+  <div class="reveal" style="max-width:540px;margin-bottom:0">
+    <div class="section-label lang-fr">Témoignages</div>
+    <div class="section-label lang-en">Testimonials</div>
+    <h2 class="lang-fr">Soyez parmi les <em>premiers</em></h2>
+    <h2 class="lang-en">Be among the <em>first</em></h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal">
+      <div class="t-icon">🤝</div>
+      <p class="t-text lang-fr">Vous êtes entrepreneur ou dirigeant ? Testez nos solutions et devenez <strong>notre premier client témoignant.</strong></p>
+      <p class="t-text lang-en">Are you an entrepreneur or executive? Try our solutions and become <strong>our first testimonial client.</strong></p>
+      <a href="#contact" class="t-cta lang-fr">Démarrer maintenant</a>
+      <a href="#contact" class="t-cta lang-en">Get started now</a>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="t-icon">⭐</div>
+      <p class="t-text lang-fr">Votre avis sera affiché ici après votre première expérience avec <strong>LancelotCorporation.</strong></p>
+      <p class="t-text lang-en">Your review will appear here after your first experience with <strong>LancelotCorporation.</strong></p>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="t-icon">🚀</div>
+      <p class="t-text lang-fr">Rejoignez les pionniers qui automatisent leur activité avec l'IA <strong>dès aujourd'hui.</strong></p>
+      <p class="t-text lang-en">Join the pioneers automating their business with AI <strong>starting today.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="reveal">
+      <div class="section-label lang-fr">Contact</div>
+      <div class="section-label lang-en">Contact</div>
+      <h2 class="lang-fr">Parlons de votre <em>projet</em></h2>
+      <h2 class="lang-en">Let's talk about your <em>project</em></h2>
+      <p class="lang-fr">Dites-nous ce que vous souhaitez automatiser. Nous revenons vers vous sous 24h avec une proposition concrète et gratuite.</p>
+      <p class="lang-en">Tell us what you want to automate. We'll get back to you within 24h with a free, concrete proposal.</p>
+      <div class="contact-perks lang-fr">
+        <div class="perk"><div class="perk-icon">⚡</div><div class="perk-text"><strong>Réponse sous 24h</strong>Garantie, même le week-end</div></div>
+        <div class="perk"><div class="perk-icon">🎁</div><div class="perk-text"><strong>Premier audit offert</strong>Analyse complète de vos besoins</div></div>
+        <div class="perk"><div class="perk-icon">🔒</div><div class="perk-text"><strong>Sans engagement</strong>Devis gratuit et sans obligation</div></div>
+        <div class="perk"><div class="perk-icon">🚀</div><div class="perk-text"><strong>Livraison en 1-2 semaines</strong>Déploiement rapide et efficace</div></div>
+      </div>
+      <div class="contact-perks lang-en">
+        <div class="perk"><div class="perk-icon">⚡</div><div class="perk-text"><strong>Response within 24h</strong>Guaranteed, even on weekends</div></div>
+        <div class="perk"><div class="perk-icon">🎁</div><div class="perk-text"><strong>First audit free</strong>Full analysis of your needs</div></div>
+        <div class="perk"><div class="perk-icon">🔒</div><div class="perk-text"><strong>No commitment</strong>Free quote with no obligation</div></div>
+        <div class="perk"><div class="perk-icon">🚀</div><div class="perk-text"><strong>1-2 week delivery</strong>Fast and efficient deployment</div></div>
+      </div>
+    </div>
+    <div class="contact-form-wrap reveal">
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="lang-fr">Prénom</label><label class="lang-en">First name</label>
+            <input type="text" placeholder="Jean">
+          </div>
+          <div class="form-group">
+            <label class="lang-fr">Nom</label><label class="lang-en">Last name</label>
+            <input type="text" placeholder="Dupont">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="jean@entreprise.com">
+        </div>
+        <div class="form-group">
+          <label class="lang-fr">Service souhaité</label><label class="lang-en">Desired service</label>
+          <select>
+            <option>Bot Telegram / WhatsApp</option>
+            <option>Agent IA connecté</option>
+            <option>Automatisation de tâches</option>
+            <option>Assistant personnel IA</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="lang-fr">Votre besoin</label><label class="lang-en">Your need</label>
+          <textarea placeholder="Décrivez ce que vous souhaitez automatiser..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">
+          <span class="lang-fr">Envoyer ma demande →</span>
+          <span class="lang-en">Send my request →</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Lancelot<span>Corporation</span></div>
+  <p class="lang-fr">© 2026 LancelotCorporation — Tous droits réservés</p>
+  <p class="lang-en">© 2026 LancelotCorporation — All rights reserved</p>
+</footer>
+
+<!-- CHATBOT -->
+<div id="chat-bubble" onclick="toggleChat()">🤖<div class="notif">1</div></div>
+<div id="chat-window">
+  <div class="chat-header">
+    <div class="chat-avatar">🤖</div>
+    <div>
+      <div class="chat-header-name">Alice — LancelotCorp</div>
+      <div class="chat-header-status">En ligne</div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-messages" id="chat-messages"></div>
+  <div class="chat-suggestions" id="chat-suggestions">
+    <button class="suggestion" onclick="sendSuggestion(this)">💬 C'est quoi LancelotCorp ?</button>
+    <button class="suggestion" onclick="sendSuggestion(this)">💰 Quels sont vos tarifs ?</button>
+    <button class="suggestion" onclick="sendSuggestion(this)">🤖 Créer un bot Telegram</button>
+    <button class="suggestion" onclick="sendSuggestion(this)">📅 Prendre rendez-vous</button>
+  </div>
+  <div class="chat-input-area">
+    <input type="text" id="chat-input" placeholder="Écrivez votre message..." onkeydown="if(event.key==='Enter')sendMessage()">
+    <button id="chat-send" onclick="sendMessage()">➤</button>
+  </div>
+</div>
+
+<script>
+  const GROQ_API_KEY = '';
+  const EMAILJS_SERVICE_ID = 'service_xi8gaal';
+  const EMAILJS_TEMPLATE_ID = 'template_sal9bom';
+  const EMAILJS_PUBLIC_KEY = 'vSxvFgB4QFxIXj6IG';
+
+  emailjs.init(EMAILJS_PUBLIC_KEY);
+
+  const SYSTEM_PROMPT = `Tu es Alice, l'assistante commerciale de LancelotCorporation, spécialisée dans l'automatisation IA.
+LancelotCorporation propose : bots Telegram & WhatsApp intelligents, agents IA connectés aux emails et agenda, automatisation de tâches, assistants personnels IA sur mesure.
+Ton rôle : répondre aux questions ET collecter le prénom, le besoin et l'email du visiteur.
+Quand tu as collecté le prénom + besoin + email, dis EXACTEMENT à la fin de ton message : "PROSPECT_COLLECTÉ|prénom|besoin|email"
+Sois chaleureuse, concise (2-3 phrases max), utilise quelques emojis. Tarifs : sur devis personnalisé uniquement. Réponds en français par défaut.`;
+
+  let chatHistory = [];
+  let emailSent = false;
+
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX+'px'; cursor.style.top = e.clientY+'px';
+    setTimeout(() => { ring.style.left = e.clientX+'px'; ring.style.top = e.clientY+'px'; }, 80);
+  });
+  document.querySelectorAll('a,button,.service-card,.perk,.testimonial-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform='translate(-50%,-50%) scale(2)'; ring.style.transform='translate(-50%,-50%) scale(1.5)'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform='translate(-50%,-50%) scale(1)'; ring.style.transform='translate(-50%,-50%) scale(1)'; });
+  });
+
+  function toggleChat() {
+    const win = document.getElementById('chat-window');
+    const bubble = document.getElementById('chat-bubble');
+    win.classList.toggle('open');
+    const notif = bubble.querySelector('.notif');
+    if (notif) notif.remove();
+    if (win.classList.contains('open') && chatHistory.length === 0) {
+      setTimeout(() => addBotMessage("Bonjour ! 👋 Je suis Alice, l'assistante de LancelotCorporation. Comment puis-je vous aider aujourd'hui ?"), 300);
+    }
+  }
+
+  function addBotMessage(text) {
+    const msgs = document.getElementById('chat-messages');
+    if (text.includes('PROSPECT_COLLECTÉ|') && !emailSent) {
+      const parts = text.split('PROSPECT_COLLECTÉ|')[1].split('|');
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {name:parts[0]||'Inconnu',message:parts[1]||'Non précisé',email:parts[2]||'Non fourni'});
+      text = text.split('PROSPECT_COLLECTÉ|')[0].trim();
+      emailSent = true;
+    }
+    const div = document.createElement('div');
+    div.className = 'msg bot'; div.textContent = text;
+    msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+    chatHistory.push({role:'assistant',content:text});
+  }
+
+  function addUserMessage(text) {
+    const msgs = document.getElementById('chat-messages');
+    const div = document.createElement('div');
+    div.className = 'msg user'; div.textContent = text;
+    msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+    chatHistory.push({role:'user',content:text});
+  }
+
+  function showTyping() {
+    const msgs = document.getElementById('chat-messages');
+    const div = document.createElement('div');
+    div.className = 'msg typing'; div.id = 'typing-indicator';
+    div.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+    msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function hideTyping() { const t = document.getElementById('typing-indicator'); if(t) t.remove(); }
+
+  function sendSuggestion(btn) {
+    document.getElementById('chat-suggestions').style.display = 'none';
+    sendMessage(btn.textContent.replace(/^.\s/,''));
+  }
+
+  async function sendMessage(text) {
+    const input = document.getElementById('chat-input');
+    const msg = text || input.value.trim();
+    if (!msg) return;
+    input.value = '';
+    addUserMessage(msg);
+    showTyping();
+    try {
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method:'POST',
+        headers:{'Authorization':`Bearer ${GROQ_API_KEY}`,'Content-Type':'application/json'},
+        body: JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'system',content:SYSTEM_PROMPT},...chatHistory],max_tokens:400,temperature:0.7})
+      });
+      const data = await res.json();
+      hideTyping();
+      addBotMessage(data.choices?.[0]?.message?.content || "Désolée, problème technique. Contactez-nous via le formulaire ! 🙏");
+    } catch(e) {
+      hideTyping();
+      addBotMessage("Désolée, problème de connexion. Utilisez le formulaire de contact ! 🙏");
+    }
+  }
+
+  function setLang(lang) {
+    document.body.classList.toggle('en', lang === 'en');
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 100);
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.form-submit');
+    btn.textContent = '✓ Message envoyé !';
+    btn.style.background = 'linear-gradient(135deg,#2d6a4f,#40916c)';
+    btn.style.color = '#fff';
+  }
+</script>
+
+<section id="booking" style="padding:6rem 2rem;text-align:center">
+  <div style="max-width:850px;margin:auto">
+    <div class="section-label">Prise de rendez-vous</div>
+    <h2 style="font-size:3rem;margin-bottom:1rem">Réservez un audit IA</h2>
+    <p style="color:var(--muted);line-height:1.8;margin-bottom:2rem">
+      Discutons de votre entreprise et des automatisations possibles.
+    </p>
+
+    <a href="https://calendly.com/" target="_blank"
+      style="display:inline-block;padding:1rem 2rem;background:var(--gold);color:black;
+      border-radius:12px;text-decoration:none;font-weight:700">
+      Réserver un appel
+    </a>
+  </div>
+</section>
+
+<!-- Google Analytics -->
+<script>
+console.log("Google Analytics prêt à connecter");
+</script>
+
+
+
+
+</body>
+</html>

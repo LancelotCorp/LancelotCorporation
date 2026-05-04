@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarifs — LancelotCorporation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0d0b08;
+  --warm-dark: #141210;
+  --warm-card: #1c1915;
+  --gold: #d4a843;
+  --amber: #e8832a;
+  --cream: #f5ede0;
+  --muted: #8a7e70;
+  --border: rgba(212,168,67,0.15);
+  --cream-dim: rgba(245,237,224,0.75);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--cream); font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 300; }
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 4rem;
+  background: rgba(13,11,8,.95);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.25rem; color: var(--cream); text-decoration: none; }
+.nav-logo span { color: var(--gold); }
+.nav-back { color: var(--muted); text-decoration: none; font-size: .8rem; letter-spacing: .07em; text-transform: uppercase; }
+.nav-back:hover { color: var(--gold); }
+
+.hero { padding: 10rem 2rem 5rem; text-align: center; }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem,5vw,4rem); font-weight: 900; line-height: 1.1; margin-bottom: 1rem; }
+.hero h1 em { font-style: italic; color: var(--gold); }
+.hero p { color: var(--muted); font-size: 1rem; line-height: 1.8; margin-bottom: 3rem; }
+
+.billing-toggle {
+  display: inline-flex;
+  background: var(--warm-card);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: .3rem;
+  margin-bottom: 4rem;
+  gap: .3rem;
+}
+.toggle-btn {
+  padding: .6rem 1.6rem; border-radius: 100px;
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: .82rem; font-weight: 500;
+  border: none; cursor: pointer; transition: all .3s;
+  background: transparent; color: var(--muted);
+}
+.toggle-btn.active { background: var(--gold); color: var(--black); }
+.badge { background: rgba(232,131,42,.25); color: var(--amber); font-size: .6rem; padding: .15rem .45rem; border-radius: 100px; margin-left: .4rem; font-weight: 600; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 0 3rem 3rem;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--warm-card);
+  padding: 2.5rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  transition: transform .3s, border-color .3s, box-shadow .3s;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.card:hover { transform: translateY(-5px); border-color: rgba(212,168,67,.4); box-shadow: 0 20px 50px rgba(0,0,0,.4); }
+.card.featured { border-color: rgba(212,168,67,.5); background: linear-gradient(145deg,#1f1b16,#1a1714); }
+
+.featured-badge {
+  display: inline-block; align-self: flex-start;
+  background: var(--gold); color: var(--black);
+  font-size: .62rem; font-weight: 700;
+  padding: .3rem .8rem; border-radius: 100px;
+  letter-spacing: .08em; text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.plan-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+.plan-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: .5rem; }
+.plan-desc { color: var(--muted); font-size: .85rem; line-height: 1.7; margin-bottom: 1.5rem; }
+
+.price-main { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: var(--gold); display: block; line-height: 1; }
+.price-sub { font-size: .75rem; color: var(--muted); margin-top: .4rem; display: block; margin-bottom: 1.8rem; }
+
+.features { list-style: none; display: flex; flex-direction: column; gap: .8rem; margin-bottom: 2rem; flex: 1; }
+.features li { font-size: .84rem; color: var(--cream-dim); display: flex; align-items: flex-start; gap: .6rem; line-height: 1.5; }
+.features li .icon { color: var(--gold); font-size: .7rem; margin-top: .2rem; flex-shrink: 0; }
+.features li.off { color: var(--muted); }
+.features li.off .icon { color: var(--muted); }
+
+.btn {
+  display: block;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--gold), var(--amber));
+  color: black;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: .88rem;
+  text-align: center;
+  transition: all .3s;
+  border: none;
+  cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  margin-top: auto;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(212,168,67,.4); color: black; }
+.btn.outline { background: transparent; border: 1px solid var(--border); color: var(--cream-dim); }
+.btn.outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+.abo-section { max-width: 1300px; margin: 0 auto; padding: 0 3rem 5rem; }
+.abo-card {
+  background: var(--warm-card); border: 1px solid var(--border); border-radius: 20px; padding: 3rem;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+}
+.abo-label { font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+.abo-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; line-height: 1.1; margin-bottom: 1rem; }
+.abo-title em { font-style: italic; color: var(--gold); }
+.abo-desc { color: var(--muted); line-height: 1.85; font-size: .95rem; margin-bottom: 2rem; }
+.abo-prices { display: flex; gap: 2rem; margin-bottom: 2rem; }
+.abo-price .amount { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900; color: var(--gold); display: block; }
+.abo-price .label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+.abo-feats { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+.abo-feat { display: flex; align-items: center; gap: .6rem; font-size: .84rem; color: var(--cream-dim); }
+.abo-feat::before { content: '✦'; color: var(--gold); font-size: .55rem; flex-shrink: 0; }
+
+.faq-section { max-width: 900px; margin: 0 auto; padding: 0 3rem 6rem; }
+.faq-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; margin-bottom: 2rem; }
+.faq-item { background: var(--warm-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1rem; cursor: pointer; }
+.faq-q { font-size: .95rem; font-weight: 500; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.faq-arrow { color: var(--gold); font-size: 1.2rem; transition: transform .3s; flex-shrink: 0; }
+.faq-item.open .faq-arrow { transform: rotate(45deg); }
+.faq-a { color: var(--muted); font-size: .88rem; line-height: 1.85; max-height: 0; overflow: hidden; transition: max-height .4s ease, margin-top .3s; }
+.faq-item.open .faq-a { max-height: 200px; margin-top: 1rem; }
+
+.cta { text-align: center; padding: 4rem 2rem 8rem; }
+.cta h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; margin-bottom: 1rem; }
+.cta h2 em { font-style: italic; color: var(--gold); }
+.cta p { color: var(--muted); margin-bottom: 2.5rem; }
+.cta .btn { display: inline-block; width: auto; }
+
+footer { background: var(--warm-dark); border-top: 1px solid var(--border); padding: 2rem 4rem; display: flex; align-items: center; justify-content: space-between; }
+.footer-logo { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.1rem; }
+.footer-logo span { color: var(--gold); }
+footer p { font-size: .76rem; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Lancelot<span>Corp</span></a>
+  <a class="nav-back" href="index.html">← Retour au site</a>
+</nav>
+
+<section class="hero">
+  <h1>Des tarifs <em>clairs</em><br>pour chaque ambition</h1>
+  <p>Solutions IA premium adaptées à votre activité, sans surprise.</p>
+  <div class="billing-toggle">
+    <button class="toggle-btn active" onclick="setBilling('project', this)">Forfait projet</button>
+    <button class="toggle-btn" onclick="setBilling('monthly', this)">Abonnement mensuel <span class="badge">-30%</span></button>
+  </div>
+</section>
+
+<div class="grid">
+
+  <div class="card">
+    <div class="plan-icon">⚡</div>
+    <div class="plan-name">Starter</div>
+    <div class="plan-desc">Idéal pour automatiser vos premières tâches et déployer un bot IA simple.</div>
+    <span class="price-main" id="price-starter">2 000€ → 4 000€</span>
+    <span class="price-sub">Livraison en 1 semaine</span>
+    <ul class="features">
+      <li><span class="icon">✦</span> Bot Telegram ou WhatsApp</li>
+      <li><span class="icon">✦</span> 1 à 3 automatisations</li>
+      <li><span class="icon">✦</span> Intégration simple (Notion, Google Sheets…)</li>
+      <li><span class="icon">✦</span> 1 mois de support inclus</li>
+      <li class="off"><span class="icon">–</span> Pas d'intégration CRM</li>
+      <li class="off"><span class="icon">–</span> Pas d'agent IA avancé</li>
+    </ul>
+    <a class="btn outline" href="index.html#contact">Commencer →</a>
+  </div>
+
+  <div class="card featured">
+    <span class="featured-badge">Recommandé</span>
+    <div class="plan-icon">🚀</div>
+    <div class="plan-name">Business</div>
+    <div class="plan-desc">Pour les PME qui veulent connecter leurs outils et automatiser leurs processus clés.</div>
+    <span class="price-main" id="price-business">5 000€ → 10 000€</span>
+    <span class="price-sub">Livraison en 1 à 2 semaines</span>
+    <ul class="features">
+      <li><span class="icon">✦</span> Agents IA connectés à vos outils</li>
+      <li><span class="icon">✦</span> Intégration CRM (HubSpot, Notion…)</li>
+      <li><span class="icon">✦</span> 5 à 10 automatisations avancées</li>
+      <li><span class="icon">✦</span> Chatbot IA sur mesure</li>
+      <li><span class="icon">✦</span> Reporting automatique mensuel</li>
+      <li><span class="icon">✦</span> 3 mois de support inclus</li>
+    </ul>
+    <a class="btn" href="index.html#contact">Demander un audit →</a>
+  </div>
+
+  <div class="card">
+    <div class="plan-icon">🏛️</div>
+    <div class="plan-name">Enterprise</div>
+    <div class="plan-desc">Architecture IA complète sur mesure pour transformer votre cœur de métier.</div>
+    <span class="price-main" id="price-enterprise">25 000€ → 50 000€+</span>
+    <span class="price-sub">Durée selon périmètre</span>
+    <ul class="features">
+      <li><span class="icon">✦</span> Système multi-agents IA complet</li>
+      <li><span class="icon">✦</span> Intégration ERP & SI sur mesure</li>
+      <li><span class="icon">✦</span> Workflows multi-systèmes complexes</li>
+      <li><span class="icon">✦</span> Architecture sécurisée & RGPD</li>
+      <li><span class="icon">✦</span> Formation & accompagnement équipes</li>
+      <li><span class="icon">✦</span> Support dédié 12 mois</li>
+    </ul>
+    <a class="btn outline" href="index.html#contact">Prendre rendez-vous →</a>
+  </div>
+
+</div>
+
+<div class="abo-section">
+  <div class="abo-card">
+    <div>
+      <div class="abo-label">Nouvelle offre</div>
+      <h2 class="abo-title">L'IA en <em>abonnement</em><br>sans engagement lourd</h2>
+      <p class="abo-desc">Pas envie d'un gros investissement initial ? Optez pour notre formule mensuelle : accès à nos services IA pour un forfait fixe, sans surprise.</p>
+      <div class="abo-prices">
+        <div class="abo-price"><span class="amount">300€</span><span class="label">Starter / mois</span></div>
+        <div class="abo-price"><span class="amount">700€</span><span class="label">Business / mois</span></div>
+        <div class="abo-price"><span class="amount">2 500€</span><span class="label">Enterprise / mois</span></div>
+      </div>
+      <a class="btn" href="index.html#contact" style="display:inline-block;width:auto;">En savoir plus →</a>
+    </div>
+    <div class="abo-feats">
+      <div class="abo-feat">Mises à jour continues</div>
+      <div class="abo-feat">Support prioritaire</div>
+      <div class="abo-feat">Optimisation mensuelle</div>
+      <div class="abo-feat">Sans engagement long terme</div>
+      <div class="abo-feat">Ajustements illimités</div>
+      <div class="abo-feat">Rapport de performance</div>
+      <div class="abo-feat">Nouveaux agents IA inclus</div>
+      <div class="abo-feat">Économie jusqu'à 30%</div>
+    </div>
+  </div>
+</div>
+
+<div class="faq-section">
+  <h2 class="faq-title">Questions fréquentes</h2>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Les prix sont-ils fixes ? <span class="faq-arrow">+</span></div>
+    <div class="faq-a">Chaque projet est adapté à vos besoins. Les fourchettes sont indicatives — nous établissons un devis précis après un audit gratuit.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Quelle est la différence entre forfait et abonnement ? <span class="faq-arrow">+</span></div>
+    <div class="faq-a">Le forfait est un investissement unique — vous êtes propriétaire. L'abonnement inclut développement, maintenance et optimisations continues pour un montant fixe mensuel.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Proposez-vous un accompagnement après livraison ? <span class="faq-arrow">+</span></div>
+    <div class="faq-a">Oui, chaque plan inclut une période de support. Au-delà, vous pouvez souscrire à notre formule de maintenance ou passer en abonnement mensuel.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Y a-t-il des coûts cachés ? <span class="faq-arrow">+</span></div>
+    <div class="faq-a">Non. Notre devis inclut tout le développement. Les seuls coûts additionnels possibles sont les frais d'API et d'hébergement, clairement indiqués en amont.</div>
+  </div>
+</div>
+
+<div class="cta">
+  <h2>Prêt à <em>automatiser</em> ?</h2>
+  <p>Audit gratuit · Réponse sous 24h · Sans engagement</p>
+  <a class="btn" href="index.html#contact">Démarrer gratuitement →</a>
+</div>
+
+<footer>
+  <div class="footer-logo">Lancelot<span>Corp</span></div>
+  <p>© 2026 LancelotCorporation — Tous droits réservés</p>
+</footer>
+
+<script>
+const prices = {
+  project: { starter: '2 000€ → 4 000€', business: '5 000€ → 10 000€', enterprise: '25 000€ → 50 000€+' },
+  monthly: { starter: '300€/mois', business: '700€/mois', enterprise: '2 500€/mois' }
+};
+function setBilling(type, btn) {
+  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('price-starter').textContent = prices[type].starter;
+  document.getElementById('price-business').textContent = prices[type].business;
+  document.getElementById('price-enterprise').textContent = prices[type].enterprise;
+}
+</script>
+
+</body>
+</html>

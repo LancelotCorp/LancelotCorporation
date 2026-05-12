@@ -5,127 +5,135 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tarifs — LancelotCorporation</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 <style>
 :root {
   --black: #0d0b08;
   --warm-dark: #141210;
   --warm-card: #1c1915;
+  --warm-card2: #231f1b;
   --gold: #d4a843;
+  --gold-light: #f0c96a;
+  --gold-dim: rgba(212,168,67,0.12);
   --amber: #e8832a;
   --cream: #f5ede0;
+  --cream-dim: rgba(245,237,224,0.75);
   --muted: #8a7e70;
   --border: rgba(212,168,67,0.15);
-  --cream-dim: rgba(245,237,224,0.75);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-body { background: var(--black); color: var(--cream); font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 300; }
+body { background: var(--black); color: var(--cream); font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; }
 
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 1.2rem 4rem;
-  background: rgba(13,11,8,.95);
-  border-bottom: 1px solid var(--border);
-}
+/* CURSOR */
+.cursor { position: fixed; z-index: 9999; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; pointer-events: none; transform: translate(-50%,-50%); transition: width .3s, height .3s; mix-blend-mode: difference; }
+.cursor-ring { position: fixed; z-index: 9998; width: 38px; height: 38px; border: 1px solid rgba(212,168,67,0.5); border-radius: 50%; pointer-events: none; transform: translate(-50%,-50%); transition: all .12s ease; }
+
+/* NOISE */
+body::after { content: ''; position: fixed; inset: 0; z-index: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E"); pointer-events: none; opacity: .5; }
+
+/* NAV */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 4rem; background: rgba(13,11,8,.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
 .nav-logo { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.25rem; color: var(--cream); text-decoration: none; }
 .nav-logo span { color: var(--gold); }
-.nav-back { color: var(--muted); text-decoration: none; font-size: .8rem; letter-spacing: .07em; text-transform: uppercase; }
+.nav-right { display: flex; align-items: center; gap: 2rem; }
+.nav-back { color: var(--muted); text-decoration: none; font-size: .8rem; letter-spacing: .07em; text-transform: uppercase; transition: color .3s; }
 .nav-back:hover { color: var(--gold); }
+.nav-cta { background: linear-gradient(135deg, var(--gold), var(--amber)); color: var(--black); padding: .45rem 1.2rem; border-radius: 6px; font-size: .78rem; font-weight: 700; text-decoration: none; transition: all .3s; }
+.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,168,67,.4); }
 
-.hero { padding: 10rem 2rem 5rem; text-align: center; }
-.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem,5vw,4rem); font-weight: 900; line-height: 1.1; margin-bottom: 1rem; }
+/* HERO */
+.hero { padding: 11rem 2rem 5rem; text-align: center; position: relative; z-index: 1; overflow: hidden; }
+.hero-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(212,168,67,.07) 0%, transparent 70%); top: -100px; left: 50%; transform: translateX(-50%); border-radius: 50%; pointer-events: none; animation: breathe 8s ease-in-out infinite; }
+@keyframes breathe { 0%,100%{transform:translateX(-50%) scale(1);opacity:1} 50%{transform:translateX(-50%) scale(1.15);opacity:.6} }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem,5vw,4rem); font-weight: 900; line-height: 1.08; margin-bottom: 1rem; animation: fadeUp .7s ease both; }
 .hero h1 em { font-style: italic; color: var(--gold); }
-.hero p { color: var(--muted); font-size: 1rem; line-height: 1.8; margin-bottom: 3rem; }
+.hero p { color: var(--muted); font-size: 1rem; line-height: 1.8; margin-bottom: 3rem; animation: fadeUp .7s .1s ease both; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
 
-.billing-toggle {
-  display: inline-flex;
-  background: var(--warm-card);
-  border: 1px solid var(--border);
-  border-radius: 100px;
-  padding: .3rem;
-  margin-bottom: 4rem;
-  gap: .3rem;
-}
-.toggle-btn {
-  padding: .6rem 1.6rem; border-radius: 100px;
-  font-family: 'Plus Jakarta Sans', sans-serif; font-size: .82rem; font-weight: 500;
-  border: none; cursor: pointer; transition: all .3s;
-  background: transparent; color: var(--muted);
-}
+/* TRUST BADGES */
+.trust-row { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 3rem; animation: fadeUp .7s .15s ease both; }
+.trust-badge { display: flex; align-items: center; gap: .5rem; background: var(--warm-card); border: 1px solid var(--border); border-radius: 100px; padding: .5rem 1.2rem; font-size: .78rem; color: var(--cream-dim); }
+.trust-badge .icon { font-size: 1rem; }
+
+/* BILLING TOGGLE */
+.billing-toggle { display: inline-flex; background: var(--warm-card); border: 1px solid var(--border); border-radius: 100px; padding: .3rem; margin-bottom: 4.5rem; gap: .3rem; animation: fadeUp .7s .2s ease both; }
+.toggle-btn { padding: .6rem 1.6rem; border-radius: 100px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: .82rem; font-weight: 500; border: none; cursor: none; transition: all .3s; background: transparent; color: var(--muted); }
 .toggle-btn.active { background: var(--gold); color: var(--black); }
-.badge { background: rgba(232,131,42,.25); color: var(--amber); font-size: .6rem; padding: .15rem .45rem; border-radius: 100px; margin-left: .4rem; font-weight: 600; }
+.saving-badge { background: rgba(232,131,42,.2); color: var(--amber); font-size: .6rem; padding: .15rem .5rem; border-radius: 100px; margin-left: .4rem; font-weight: 700; }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  padding: 0 3rem 3rem;
-  max-width: 1300px;
-  margin: 0 auto;
-}
+/* POUR QUI */
+.for-who { max-width: 1100px; margin: 0 auto 3rem; padding: 0 3rem; }
+.for-who-label { font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; display: flex; align-items: center; gap: .8rem; }
+.for-who-label::before { content: ''; width: 28px; height: 1px; background: var(--gold); opacity: .5; }
+.profiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.profile { background: var(--warm-card); border: 1px solid var(--border); border-radius: 14px; padding: 1.2rem 1.4rem; display: flex; align-items: center; gap: 1rem; transition: all .3s; cursor: none; }
+.profile:hover { border-color: rgba(212,168,67,.4); background: var(--warm-card2); transform: translateY(-3px); }
+.profile-emoji { font-size: 1.5rem; }
+.profile-info strong { display: block; font-size: .9rem; color: var(--cream); margin-bottom: .2rem; }
+.profile-info span { font-size: .76rem; color: var(--muted); }
+.profile-plan { margin-left: auto; font-size: .68rem; color: var(--gold); border: 1px solid rgba(212,168,67,.3); padding: .2rem .6rem; border-radius: 100px; white-space: nowrap; }
 
-.card {
-  background: var(--warm-card);
-  padding: 2.5rem;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  transition: transform .3s, border-color .3s, box-shadow .3s;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-.card:hover { transform: translateY(-5px); border-color: rgba(212,168,67,.4); box-shadow: 0 20px 50px rgba(0,0,0,.4); }
-.card.featured { border-color: rgba(212,168,67,.5); background: linear-gradient(145deg,#1f1b16,#1a1714); }
-
-.featured-badge {
-  display: inline-block; align-self: flex-start;
-  background: var(--gold); color: var(--black);
-  font-size: .62rem; font-weight: 700;
-  padding: .3rem .8rem; border-radius: 100px;
-  letter-spacing: .08em; text-transform: uppercase;
-  margin-bottom: 1rem;
-}
-
+/* CARDS GRID */
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; padding: 0 3rem 3rem; max-width: 1300px; margin: 0 auto; }
+.card { background: var(--warm-card); padding: 2.5rem; border-radius: 20px; border: 1px solid var(--border); transition: transform .4s, border-color .3s, box-shadow .3s; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 0% 0%, rgba(212,168,67,.06), transparent 60%); opacity: 0; transition: opacity .4s; }
+.card:hover { transform: translateY(-7px); border-color: rgba(212,168,67,.4); box-shadow: 0 24px 60px rgba(0,0,0,.45); }
+.card:hover::before { opacity: 1; }
+.card.featured { border-color: rgba(212,168,67,.5); background: linear-gradient(145deg,#1f1b16,#1a1714); box-shadow: 0 0 0 1px rgba(212,168,67,.2), 0 20px 50px rgba(0,0,0,.4); }
+.featured-badge { display: inline-block; align-self: flex-start; background: var(--gold); color: var(--black); font-size: .62rem; font-weight: 700; padding: .3rem .8rem; border-radius: 100px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 1rem; }
 .plan-icon { font-size: 1.8rem; margin-bottom: 1rem; }
 .plan-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: .5rem; }
 .plan-desc { color: var(--muted); font-size: .85rem; line-height: 1.7; margin-bottom: 1.5rem; }
+.price-main { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: var(--gold); display: block; line-height: 1; transition: all .4s; }
+.price-sub { font-size: .75rem; color: var(--muted); margin-top: .4rem; display: block; margin-bottom: 1rem; }
 
-.price-main { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: var(--gold); display: block; line-height: 1; }
-.price-sub { font-size: .75rem; color: var(--muted); margin-top: .4rem; display: block; margin-bottom: 1.8rem; }
+/* ROI BAR */
+.roi-bar-wrap { margin-bottom: 1.8rem; }
+.roi-bar-label { font-size: .7rem; color: var(--muted); margin-bottom: .4rem; display: flex; justify-content: space-between; }
+.roi-bar-label span { color: var(--gold); font-weight: 600; }
+.roi-bar { height: 4px; background: rgba(212,168,67,.12); border-radius: 100px; overflow: hidden; }
+.roi-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--amber)); border-radius: 100px; transform: scaleX(0); transform-origin: left; transition: transform 1s cubic-bezier(.16,1,.3,1); }
+.roi-bar-fill.animated { transform: scaleX(1); }
 
 .features { list-style: none; display: flex; flex-direction: column; gap: .8rem; margin-bottom: 2rem; flex: 1; }
 .features li { font-size: .84rem; color: var(--cream-dim); display: flex; align-items: flex-start; gap: .6rem; line-height: 1.5; }
-.features li .icon { color: var(--gold); font-size: .7rem; margin-top: .2rem; flex-shrink: 0; }
+.features li .icon { color: var(--gold); font-size: .7rem; margin-top: .25rem; flex-shrink: 0; }
 .features li.off { color: var(--muted); }
 .features li.off .icon { color: var(--muted); }
 
-.btn {
-  display: block;
-  padding: 1rem 2rem;
-  background: linear-gradient(135deg, var(--gold), var(--amber));
-  color: black;
-  text-decoration: none;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: .88rem;
-  text-align: center;
-  transition: all .3s;
-  border: none;
-  cursor: pointer;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  margin-top: auto;
-}
+.card-footer { display: flex; flex-direction: column; gap: .6rem; margin-top: auto; }
+.btn { display: block; padding: 1rem 2rem; background: linear-gradient(135deg, var(--gold), var(--amber)); color: black; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: .88rem; text-align: center; transition: all .3s; border: none; cursor: none; font-family: 'Plus Jakarta Sans', sans-serif; }
 .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(212,168,67,.4); color: black; }
 .btn.outline { background: transparent; border: 1px solid var(--border); color: var(--cream-dim); }
-.btn.outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+.btn.outline:hover { border-color: var(--gold); color: var(--gold); }
+.btn-delivery { text-align: center; font-size: .7rem; color: var(--muted); }
+.btn-delivery span { color: var(--gold); }
 
+/* COMPARE TABLE */
+.compare-section { max-width: 1100px; margin: 0 auto; padding: 0 3rem 5rem; }
+.compare-label { font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; display: flex; align-items: center; gap: .8rem; }
+.compare-label::before { content: ''; width: 28px; height: 1px; background: var(--gold); opacity: .5; }
+.compare-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; margin-bottom: 2.5rem; }
+.compare-title em { font-style: italic; color: var(--gold); }
+.compare-table { width: 100%; border-collapse: collapse; }
+.compare-table th { font-family: 'Playfair Display', serif; font-weight: 700; font-size: .95rem; padding: 1rem 1.5rem; text-align: left; border-bottom: 1px solid var(--border); color: var(--cream); }
+.compare-table th:not(:first-child) { text-align: center; }
+.compare-table th.featured-col { color: var(--gold); }
+.compare-table td { padding: .9rem 1.5rem; font-size: .84rem; color: var(--cream-dim); border-bottom: 1px solid rgba(212,168,67,.06); }
+.compare-table td:not(:first-child) { text-align: center; }
+.compare-table tr:hover td { background: rgba(212,168,67,.03); }
+.compare-table td.featured-col { color: var(--gold); font-weight: 600; }
+.check { color: var(--gold); font-size: 1rem; }
+.cross { color: #444; font-size: .9rem; }
+.cat-row td { font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); padding-top: 1.8rem; padding-bottom: .5rem; opacity: .7; border-bottom: none; }
+
+/* ABO SECTION */
 .abo-section { max-width: 1300px; margin: 0 auto; padding: 0 3rem 5rem; }
-.abo-card {
-  background: var(--warm-card); border: 1px solid var(--border); border-radius: 20px; padding: 3rem;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
-}
+.abo-card { background: var(--warm-card); border: 1px solid var(--border); border-radius: 20px; padding: 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; position: relative; overflow: hidden; }
+.abo-card::before { content: ''; position: absolute; top: -80px; right: -80px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(212,168,67,.07), transparent 70%); border-radius: 50%; pointer-events: none; }
 .abo-label { font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
 .abo-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; line-height: 1.1; margin-bottom: 1rem; }
 .abo-title em { font-style: italic; color: var(--gold); }
@@ -137,51 +145,152 @@ nav {
 .abo-feat { display: flex; align-items: center; gap: .6rem; font-size: .84rem; color: var(--cream-dim); }
 .abo-feat::before { content: '✦'; color: var(--gold); font-size: .55rem; flex-shrink: 0; }
 
+/* TESTIMONIALS */
+.testimonials-section { max-width: 1100px; margin: 0 auto; padding: 0 3rem 5rem; }
+.section-label { font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; display: flex; align-items: center; gap: .8rem; }
+.section-label::before { content: ''; width: 28px; height: 1px; background: var(--gold); opacity: .5; }
+.section-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; margin-bottom: 2rem; }
+.section-title em { font-style: italic; color: var(--gold); }
+.testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+.testimonial-card { background: var(--warm-card); padding: 2.2rem; border-radius: 18px; border: 1px solid var(--border); transition: all .3s; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 200px; border-style: dashed; }
+.testimonial-card:hover { border-color: rgba(212,168,67,.35); transform: translateY(-5px); border-style: solid; }
+.t-icon { font-size: 2rem; margin-bottom: 1rem; }
+.t-text { color: var(--muted); font-size: .88rem; line-height: 1.75; margin-bottom: 1.2rem; }
+.t-text strong { color: var(--gold); }
+.t-cta { background: linear-gradient(135deg,var(--gold),var(--amber)); color: var(--black); padding: .6rem 1.4rem; border-radius: 8px; font-size: .8rem; font-weight: 600; text-decoration: none; display: inline-block; transition: all .3s; }
+.t-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,168,67,.35); }
+
+/* FAQ */
 .faq-section { max-width: 900px; margin: 0 auto; padding: 0 3rem 6rem; }
 .faq-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; margin-bottom: 2rem; }
-.faq-item { background: var(--warm-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1rem; cursor: pointer; }
+.faq-title em { font-style: italic; color: var(--gold); }
+.faq-item { background: var(--warm-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1rem; cursor: none; transition: border-color .3s; }
+.faq-item:hover { border-color: rgba(212,168,67,.3); }
+.faq-item.open { border-color: rgba(212,168,67,.35); }
 .faq-q { font-size: .95rem; font-weight: 500; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
 .faq-arrow { color: var(--gold); font-size: 1.2rem; transition: transform .3s; flex-shrink: 0; }
 .faq-item.open .faq-arrow { transform: rotate(45deg); }
 .faq-a { color: var(--muted); font-size: .88rem; line-height: 1.85; max-height: 0; overflow: hidden; transition: max-height .4s ease, margin-top .3s; }
-.faq-item.open .faq-a { max-height: 200px; margin-top: 1rem; }
+.faq-item.open .faq-a { max-height: 300px; margin-top: 1rem; }
 
-.cta { text-align: center; padding: 4rem 2rem 8rem; }
-.cta h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; margin-bottom: 1rem; }
+/* CTA FINAL */
+.cta { text-align: center; padding: 5rem 2rem 8rem; position: relative; z-index: 1; }
+.cta-glow { position: absolute; width: 500px; height: 300px; background: radial-gradient(ellipse, rgba(212,168,67,.06), transparent 70%); left: 50%; top: 50%; transform: translate(-50%,-50%); pointer-events: none; }
+.cta h2 { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 900; margin-bottom: 1rem; }
 .cta h2 em { font-style: italic; color: var(--gold); }
-.cta p { color: var(--muted); margin-bottom: 2.5rem; }
+.cta p { color: var(--muted); margin-bottom: 2.5rem; font-size: .95rem; }
+.cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
 .cta .btn { display: inline-block; width: auto; }
 
-footer { background: var(--warm-dark); border-top: 1px solid var(--border); padding: 2rem 4rem; display: flex; align-items: center; justify-content: space-between; }
+/* FOOTER */
+footer { background: var(--warm-dark); border-top: 1px solid var(--border); padding: 2rem 4rem; display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
 .footer-logo { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.1rem; }
 .footer-logo span { color: var(--gold); }
 footer p { font-size: .76rem; color: var(--muted); }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(28px); transition: all .75s cubic-bezier(.16,1,.3,1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* MOBILE */
+@media(max-width:900px) {
+  nav { padding: 1rem 1.5rem; }
+  .hero { padding: 8rem 1.5rem 4rem; }
+  .grid { grid-template-columns: 1fr; padding: 0 1.5rem 3rem; }
+  .profiles { grid-template-columns: 1fr; }
+  .abo-card { grid-template-columns: 1fr; gap: 2rem; }
+  .abo-prices { flex-wrap: wrap; gap: 1rem; }
+  .compare-section, .abo-section, .faq-section, .for-who, .testimonials-section { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+  .trust-row { gap: 1rem; }
+  .cta-btns { flex-direction: column; align-items: center; }
+}
+
+@media(max-width:768px) {
+  nav { padding: 1rem 1.2rem !important; }
+  .compare-table { font-size: .78rem; }
+  .compare-table th, .compare-table td { padding: .7rem .8rem; }
+}
 </style>
 </head>
 <body>
 
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
 <nav>
   <a class="nav-logo" href="index.html">Lancelot<span>Corp</span></a>
-  <a class="nav-back" href="index.html">← Retour au site</a>
+  <div class="nav-right">
+    <a class="nav-back" href="index.html">← Retour au site</a>
+    <a class="nav-cta" href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/esteesct/30min'});return false;">📅 Réserver un audit</a>
+  </div>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
+  <div class="hero-glow"></div>
   <h1>Des tarifs <em>clairs</em><br>pour chaque ambition</h1>
-  <p>Solutions IA premium adaptées à votre activité, sans surprise.</p>
-  <div class="billing-toggle">
+  <p>Solutions IA premium adaptées à votre activité, sans surprise.<br>Audit gratuit · Réponse sous 24h · Livraison en 1-2 semaines</p>
+
+  <div class="trust-row reveal">
+    <div class="trust-badge"><span class="icon">🎁</span> Audit 100% gratuit</div>
+    <div class="trust-badge"><span class="icon">🔒</span> Sans engagement</div>
+    <div class="trust-badge"><span class="icon">⚡</span> Réponse sous 24h</div>
+    <div class="trust-badge"><span class="icon">🚀</span> Livraison 1-2 semaines</div>
+  </div>
+
+  <div class="billing-toggle reveal">
     <button class="toggle-btn active" onclick="setBilling('project', this)">Forfait projet</button>
-    <button class="toggle-btn" onclick="setBilling('monthly', this)">Abonnement mensuel <span class="badge">-30%</span></button>
+    <button class="toggle-btn" onclick="setBilling('monthly', this)">Abonnement mensuel <span class="saving-badge">-30%</span></button>
   </div>
 </section>
 
-<div class="grid">
+<!-- POUR QUI -->
+<div class="for-who reveal">
+  <div class="for-who-label">Pour qui ?</div>
+  <div class="profiles">
+    <div class="profile">
+      <div class="profile-emoji">👤</div>
+      <div class="profile-info">
+        <strong>Freelance / Solo</strong>
+        <span>Automatiser les tâches répétitives</span>
+      </div>
+      <div class="profile-plan">Starter</div>
+    </div>
+    <div class="profile">
+      <div class="profile-emoji">🏢</div>
+      <div class="profile-info">
+        <strong>PME / Start-up</strong>
+        <span>Connecter ses outils et scaler</span>
+      </div>
+      <div class="profile-plan">Business</div>
+    </div>
+    <div class="profile">
+      <div class="profile-emoji">🏛️</div>
+      <div class="profile-info">
+        <strong>Grand compte / ETI</strong>
+        <span>Transformer son cœur de métier</span>
+      </div>
+      <div class="profile-plan">Enterprise</div>
+    </div>
+  </div>
+</div>
 
-  <div class="card">
+<!-- CARDS -->
+<div class="grid" style="margin-top:3rem">
+
+  <!-- STARTER -->
+  <div class="card reveal">
     <div class="plan-icon">⚡</div>
     <div class="plan-name">Starter</div>
     <div class="plan-desc">Idéal pour automatiser vos premières tâches et déployer un bot IA simple.</div>
     <span class="price-main" id="price-starter">2 000€ → 4 000€</span>
-    <span class="price-sub">Livraison en 1 semaine</span>
+    <span class="price-sub" id="sub-starter">Paiement unique · Livraison 1 semaine</span>
+    <div class="roi-bar-wrap">
+      <div class="roi-bar-label">Temps économisé <span>~40h/mois</span></div>
+      <div class="roi-bar"><div class="roi-bar-fill" data-width="0.33"></div></div>
+    </div>
     <ul class="features">
       <li><span class="icon">✦</span> Bot Telegram ou WhatsApp</li>
       <li><span class="icon">✦</span> 1 à 3 automatisations</li>
@@ -190,16 +299,24 @@ footer p { font-size: .76rem; color: var(--muted); }
       <li class="off"><span class="icon">–</span> Pas d'intégration CRM</li>
       <li class="off"><span class="icon">–</span> Pas d'agent IA avancé</li>
     </ul>
-    <a class="btn outline" href="index.html#contact">Commencer →</a>
+    <div class="card-footer">
+      <a class="btn outline" href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/esteesct/30min'});return false;">Commencer — Audit gratuit →</a>
+      <div class="btn-delivery">Livraison garantie <span>sous 1 semaine</span></div>
+    </div>
   </div>
 
-  <div class="card featured">
-    <span class="featured-badge">Recommandé</span>
+  <!-- BUSINESS -->
+  <div class="card featured reveal">
+    <span class="featured-badge">⭐ Recommandé</span>
     <div class="plan-icon">🚀</div>
     <div class="plan-name">Business</div>
     <div class="plan-desc">Pour les PME qui veulent connecter leurs outils et automatiser leurs processus clés.</div>
     <span class="price-main" id="price-business">5 000€ → 10 000€</span>
-    <span class="price-sub">Livraison en 1 à 2 semaines</span>
+    <span class="price-sub" id="sub-business">Paiement unique · Livraison 1-2 semaines</span>
+    <div class="roi-bar-wrap">
+      <div class="roi-bar-label">Temps économisé <span>~120h/mois</span></div>
+      <div class="roi-bar"><div class="roi-bar-fill" data-width="0.66"></div></div>
+    </div>
     <ul class="features">
       <li><span class="icon">✦</span> Agents IA connectés à vos outils</li>
       <li><span class="icon">✦</span> Intégration CRM (HubSpot, Notion…)</li>
@@ -208,15 +325,23 @@ footer p { font-size: .76rem; color: var(--muted); }
       <li><span class="icon">✦</span> Reporting automatique mensuel</li>
       <li><span class="icon">✦</span> 3 mois de support inclus</li>
     </ul>
-    <a class="btn" href="index.html#contact">Demander un audit →</a>
+    <div class="card-footer">
+      <a class="btn" href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/esteesct/30min'});return false;">Demander un audit gratuit →</a>
+      <div class="btn-delivery">Livraison garantie <span>sous 2 semaines</span></div>
+    </div>
   </div>
 
-  <div class="card">
+  <!-- ENTERPRISE -->
+  <div class="card reveal">
     <div class="plan-icon">🏛️</div>
     <div class="plan-name">Enterprise</div>
     <div class="plan-desc">Architecture IA complète sur mesure pour transformer votre cœur de métier.</div>
     <span class="price-main" id="price-enterprise">25 000€ → 50 000€+</span>
-    <span class="price-sub">Durée selon périmètre</span>
+    <span class="price-sub" id="sub-enterprise">Sur devis · Durée selon périmètre</span>
+    <div class="roi-bar-wrap">
+      <div class="roi-bar-label">Temps économisé <span>~200h/mois</span></div>
+      <div class="roi-bar"><div class="roi-bar-fill" data-width="1"></div></div>
+    </div>
     <ul class="features">
       <li><span class="icon">✦</span> Système multi-agents IA complet</li>
       <li><span class="icon">✦</span> Intégration ERP & SI sur mesure</li>
@@ -225,23 +350,63 @@ footer p { font-size: .76rem; color: var(--muted); }
       <li><span class="icon">✦</span> Formation & accompagnement équipes</li>
       <li><span class="icon">✦</span> Support dédié 12 mois</li>
     </ul>
-    <a class="btn outline" href="index.html#contact">Prendre rendez-vous →</a>
+    <div class="card-footer">
+      <a class="btn outline" href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/esteesct/30min'});return false;">Prendre rendez-vous →</a>
+      <div class="btn-delivery">Délai <span>selon périmètre</span></div>
+    </div>
   </div>
 
 </div>
 
+<!-- TABLEAU COMPARATIF -->
+<div class="compare-section reveal">
+  <div class="compare-label">Comparatif</div>
+  <h2 class="compare-title">Tout <em>comparer</em> en un coup d'œil</h2>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th style="width:40%">Fonctionnalité</th>
+        <th>Starter</th>
+        <th class="featured-col">Business</th>
+        <th>Enterprise</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="cat-row"><td colspan="4">Automatisation</td></tr>
+      <tr><td>Bot Telegram / WhatsApp</td><td><span class="check">✦</span></td><td class="featured-col"><span class="check">✦</span></td><td><span class="check">✦</span></td></tr>
+      <tr><td>Nombre d'automatisations</td><td>1 à 3</td><td class="featured-col">5 à 10</td><td>Illimité</td></tr>
+      <tr><td>Agents IA connectés</td><td><span class="cross">–</span></td><td class="featured-col"><span class="check">✦</span></td><td><span class="check">✦</span></td></tr>
+      <tr><td>Système multi-agents</td><td><span class="cross">–</span></td><td class="featured-col"><span class="cross">–</span></td><td><span class="check">✦</span></td></tr>
+
+      <tr class="cat-row"><td colspan="4">Intégrations</td></tr>
+      <tr><td>Notion / Google Sheets</td><td><span class="check">✦</span></td><td class="featured-col"><span class="check">✦</span></td><td><span class="check">✦</span></td></tr>
+      <tr><td>CRM (HubSpot, Notion…)</td><td><span class="cross">–</span></td><td class="featured-col"><span class="check">✦</span></td><td><span class="check">✦</span></td></tr>
+      <tr><td>ERP / SI sur mesure</td><td><span class="cross">–</span></td><td class="featured-col"><span class="cross">–</span></td><td><span class="check">✦</span></td></tr>
+      <tr><td>Emails & Agenda Google</td><td><span class="cross">–</span></td><td class="featured-col"><span class="check">✦</span></td><td><span class="check">✦</span></td></tr>
+
+      <tr class="cat-row"><td colspan="4">Support & livraison</td></tr>
+      <tr><td>Délai de livraison</td><td>1 semaine</td><td class="featured-col">1-2 semaines</td><td>Sur mesure</td></tr>
+      <tr><td>Support inclus</td><td>1 mois</td><td class="featured-col">3 mois</td><td>12 mois</td></tr>
+      <tr><td>Formation équipes</td><td><span class="cross">–</span></td><td class="featured-col"><span class="cross">–</span></td><td><span class="check">✦</span></td></tr>
+      <tr><td>Reporting mensuel</td><td><span class="cross">–</span></td><td class="featured-col"><span class="check">✦</span></td><td><span class="check">✦</span></td></tr>
+      <tr><td>RGPD & sécurité avancée</td><td><span class="cross">–</span></td><td class="featured-col"><span class="cross">–</span></td><td><span class="check">✦</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ABO SECTION -->
 <div class="abo-section">
-  <div class="abo-card">
+  <div class="abo-card reveal">
     <div>
-      <div class="abo-label">Nouvelle offre</div>
+      <div class="abo-label">✦ Nouvelle offre</div>
       <h2 class="abo-title">L'IA en <em>abonnement</em><br>sans engagement lourd</h2>
-      <p class="abo-desc">Pas envie d'un gros investissement initial ? Optez pour notre formule mensuelle : accès à nos services IA pour un forfait fixe, sans surprise.</p>
+      <p class="abo-desc">Pas envie d'un gros investissement initial ? Optez pour notre formule mensuelle : accès à nos services IA pour un forfait fixe, sans surprise. Résiliable à tout moment.</p>
       <div class="abo-prices">
         <div class="abo-price"><span class="amount">300€</span><span class="label">Starter / mois</span></div>
         <div class="abo-price"><span class="amount">700€</span><span class="label">Business / mois</span></div>
         <div class="abo-price"><span class="amount">2 500€</span><span class="label">Enterprise / mois</span></div>
       </div>
-      <a class="btn" href="index.html#contact" style="display:inline-block;width:auto;">En savoir plus →</a>
+      <a class="btn" href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/esteesct/30min'});return false;" style="display:inline-block;width:auto;">En savoir plus — Audit gratuit →</a>
     </div>
     <div class="abo-feats">
       <div class="abo-feat">Mises à jour continues</div>
@@ -256,30 +421,66 @@ footer p { font-size: .76rem; color: var(--muted); }
   </div>
 </div>
 
-<div class="faq-section">
-  <h2 class="faq-title">Questions fréquentes</h2>
-  <div class="faq-item" onclick="this.classList.toggle('open')">
-    <div class="faq-q">Les prix sont-ils fixes ? <span class="faq-arrow">+</span></div>
-    <div class="faq-a">Chaque projet est adapté à vos besoins. Les fourchettes sont indicatives — nous établissons un devis précis après un audit gratuit.</div>
-  </div>
-  <div class="faq-item" onclick="this.classList.toggle('open')">
-    <div class="faq-q">Quelle est la différence entre forfait et abonnement ? <span class="faq-arrow">+</span></div>
-    <div class="faq-a">Le forfait est un investissement unique — vous êtes propriétaire. L'abonnement inclut développement, maintenance et optimisations continues pour un montant fixe mensuel.</div>
-  </div>
-  <div class="faq-item" onclick="this.classList.toggle('open')">
-    <div class="faq-q">Proposez-vous un accompagnement après livraison ? <span class="faq-arrow">+</span></div>
-    <div class="faq-a">Oui, chaque plan inclut une période de support. Au-delà, vous pouvez souscrire à notre formule de maintenance ou passer en abonnement mensuel.</div>
-  </div>
-  <div class="faq-item" onclick="this.classList.toggle('open')">
-    <div class="faq-q">Y a-t-il des coûts cachés ? <span class="faq-arrow">+</span></div>
-    <div class="faq-a">Non. Notre devis inclut tout le développement. Les seuls coûts additionnels possibles sont les frais d'API et d'hébergement, clairement indiqués en amont.</div>
+<!-- TÉMOIGNAGES -->
+<div class="testimonials-section">
+  <div class="section-label reveal">Témoignages</div>
+  <h2 class="section-title reveal">Soyez parmi les <em>premiers</em></h2>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal">
+      <div class="t-icon">🤝</div>
+      <p class="t-text">Vous êtes entrepreneur ou dirigeant ? Testez nos solutions et devenez <strong>notre premier client témoignant.</strong></p>
+      <a href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/esteesct/30min'});return false;" class="t-cta">Démarrer maintenant</a>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="t-icon">⭐</div>
+      <p class="t-text">Votre avis sera affiché ici après votre première expérience avec <strong>LancelotCorporation.</strong></p>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="t-icon">🚀</div>
+      <p class="t-text">Rejoignez les pionniers qui automatisent leur activité avec l'IA <strong>dès aujourd'hui.</strong></p>
+    </div>
   </div>
 </div>
 
+<!-- FAQ -->
+<div class="faq-section">
+  <h2 class="faq-title reveal">Questions <em>fréquentes</em></h2>
+
+  <div class="faq-item reveal" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Les prix sont-ils fixes ? <span class="faq-arrow">+</span></div>
+    <div class="faq-a">Chaque projet est adapté à vos besoins. Les fourchettes sont indicatives — nous établissons un devis précis après un audit gratuit, sans engagement de votre part.</div>
+  </div>
+  <div class="faq-item reveal" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Quelle est la différence entre forfait et abonnement ? <span class="faq-arrow">+</span></div>
+    <div class="faq-a">Le forfait est un investissement unique — vous êtes propriétaire de la solution. L'abonnement inclut développement, maintenance et optimisations continues pour un montant fixe mensuel, résiliable à tout moment.</div>
+  </div>
+  <div class="faq-item reveal" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Combien de temps pour voir des résultats ? <span class="faq-arrow">+</span></div>
+    <div class="faq-a">Dès la livraison, soit en 1 à 2 semaines. Les premières automatisations génèrent un gain de temps immédiat et mesurable. La plupart de nos clients récupèrent leur investissement en moins de 3 mois.</div>
+  </div>
+  <div class="faq-item reveal" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Puis-je changer de plan en cours de route ? <span class="faq-arrow">+</span></div>
+    <div class="faq-a">Oui, totalement. Si vos besoins évoluent, nous adaptons la solution. En abonnement, vous pouvez monter ou descendre de plan à tout moment. En forfait, nous proposons des extensions modulaires.</div>
+  </div>
+  <div class="faq-item reveal" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Proposez-vous un accompagnement après livraison ? <span class="faq-arrow">+</span></div>
+    <div class="faq-a">Oui, chaque plan inclut une période de support dédiée. Au-delà, vous pouvez souscrire à notre formule de maintenance ou basculer en abonnement mensuel pour un suivi continu.</div>
+  </div>
+  <div class="faq-item reveal" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Y a-t-il des coûts cachés ? <span class="faq-arrow">+</span></div>
+    <div class="faq-a">Non. Notre devis inclut tout le développement. Les seuls coûts additionnels possibles sont les frais d'API tiers (OpenAI, Google…) et d'hébergement, toujours clairement indiqués en amont dans le devis.</div>
+  </div>
+</div>
+
+<!-- CTA FINAL -->
 <div class="cta">
-  <h2>Prêt à <em>automatiser</em> ?</h2>
-  <p>Audit gratuit · Réponse sous 24h · Sans engagement</p>
-  <a class="btn" href="index.html#contact">Démarrer gratuitement →</a>
+  <div class="cta-glow"></div>
+  <h2 class="reveal">Prêt à <em>automatiser</em> ?</h2>
+  <p class="reveal">Audit gratuit · Réponse sous 24h · Sans engagement · Livraison en 1-2 semaines</p>
+  <div class="cta-btns reveal">
+    <a class="btn" href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/esteesct/30min'});return false;">📅 Réserver mon audit gratuit</a>
+    <a class="btn outline" href="index.html#contact">Envoyer un message →</a>
+  </div>
 </div>
 
 <footer>
@@ -288,17 +489,60 @@ footer p { font-size: .76rem; color: var(--muted); }
 </footer>
 
 <script>
+/* CURSOR */
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX+'px'; cursor.style.top = e.clientY+'px';
+  setTimeout(() => { ring.style.left = e.clientX+'px'; ring.style.top = e.clientY+'px'; }, 80);
+});
+document.querySelectorAll('a,button,.card,.profile,.faq-item,.testimonial-card').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.transform='translate(-50%,-50%) scale(2)'; ring.style.transform='translate(-50%,-50%) scale(1.5)'; });
+  el.addEventListener('mouseleave', () => { cursor.style.transform='translate(-50%,-50%) scale(1)'; ring.style.transform='translate(-50%,-50%) scale(1)'; });
+});
+
+/* BILLING TOGGLE */
 const prices = {
-  project: { starter: '2 000€ → 4 000€', business: '5 000€ → 10 000€', enterprise: '25 000€ → 50 000€+' },
-  monthly: { starter: '300€/mois', business: '700€/mois', enterprise: '2 500€/mois' }
+  project: {
+    starter: { price: '2 000€ → 4 000€', sub: 'Paiement unique · Livraison 1 semaine' },
+    business: { price: '5 000€ → 10 000€', sub: 'Paiement unique · Livraison 1-2 semaines' },
+    enterprise: { price: '25 000€ → 50 000€+', sub: 'Sur devis · Durée selon périmètre' }
+  },
+  monthly: {
+    starter: { price: '300€ / mois', sub: 'Sans engagement · Résiliable à tout moment' },
+    business: { price: '700€ / mois', sub: 'Sans engagement · Résiliable à tout moment' },
+    enterprise: { price: '2 500€ / mois', sub: 'Sans engagement · Résiliable à tout moment' }
+  }
 };
 function setBilling(type, btn) {
   document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('price-starter').textContent = prices[type].starter;
-  document.getElementById('price-business').textContent = prices[type].business;
-  document.getElementById('price-enterprise').textContent = prices[type].enterprise;
+  ['starter','business','enterprise'].forEach(plan => {
+    const p = prices[type][plan];
+    document.getElementById('price-'+plan).textContent = p.price;
+    document.getElementById('sub-'+plan).textContent = p.sub;
+  });
 }
+
+/* REVEAL SCROLL */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ROI BARS */
+const roiObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.roi-bar-fill').forEach(bar => {
+        bar.classList.add('animated');
+      });
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.card').forEach(card => roiObserver.observe(card));
 </script>
 
 </body>

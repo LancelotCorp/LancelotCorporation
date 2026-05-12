@@ -78,7 +78,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; a
 /* CARDS GRID */
 .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; padding: 0 3rem 3rem; max-width: 1300px; margin: 0 auto; }
 .card { background: var(--warm-card); padding: 2.5rem; border-radius: 20px; border: 1px solid var(--border); transition: transform .4s, border-color .3s, box-shadow .3s; display: flex; flex-direction: column; position: relative; overflow: hidden; }
-.card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 0% 0%, rgba(212,168,67,.06), transparent 60%); opacity: 0; transition: opacity .4s; }
+.card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 0% 0%, rgba(212,168,67,.06), transparent 60%); opacity: 0; transition: opacity .4s; pointer-events: none; }
 .card:hover { transform: translateY(-7px); border-color: rgba(212,168,67,.4); box-shadow: 0 24px 60px rgba(0,0,0,.45); }
 .card:hover::before { opacity: 1; }
 .card.featured { border-color: rgba(212,168,67,.5); background: linear-gradient(145deg,#1f1b16,#1a1714); box-shadow: 0 0 0 1px rgba(212,168,67,.2), 0 20px 50px rgba(0,0,0,.4); }
@@ -486,7 +486,6 @@ footer p { font-size: .76rem; color: var(--muted); }
 
 <script>
 /* CURSOR */
-const cursor = document.getElementById('cursor');
 /* CALENDLY */
 function openCalendly() {
   if (typeof Calendly !== 'undefined') {

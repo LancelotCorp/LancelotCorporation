@@ -6,7 +6,7 @@
 <title>Tarifs — LancelotCorporation</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<script src="https://assets.calendly.com/assets/external/widget.js"></script>
 <style>
 :root {
   --black: #0d0b08;
@@ -25,11 +25,10 @@
 
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-body { background: var(--black); color: var(--cream); font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; }
+body { background: var(--black); color: var(--cream); font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 300; overflow-x: hidden; }
+a, button { cursor: pointer !important; }
 
-/* CURSOR */
-.cursor { position: fixed; z-index: 9999; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; pointer-events: none; transform: translate(-50%,-50%); transition: width .3s, height .3s; mix-blend-mode: difference; }
-.cursor-ring { position: fixed; z-index: 9998; width: 38px; height: 38px; border: 1px solid rgba(212,168,67,0.5); border-radius: 50%; pointer-events: none; transform: translate(-50%,-50%); transition: all .12s ease; }
+/* CURSOR REMOVED */
 
 /* NOISE */
 body::after { content: ''; position: fixed; inset: 0; z-index: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E"); pointer-events: none; opacity: .5; }
@@ -60,7 +59,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; a
 
 /* BILLING TOGGLE */
 .billing-toggle { display: inline-flex; background: var(--warm-card); border: 1px solid var(--border); border-radius: 100px; padding: .3rem; margin-bottom: 4.5rem; gap: .3rem; animation: fadeUp .7s .2s ease both; }
-.toggle-btn { padding: .6rem 1.6rem; border-radius: 100px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: .82rem; font-weight: 500; border: none; cursor: none; transition: all .3s; background: transparent; color: var(--muted); }
+.toggle-btn { padding: .6rem 1.6rem; border-radius: 100px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: .82rem; font-weight: 500; border: none; cursor: pointer; transition: all .3s; background: transparent; color: var(--muted); }
 .toggle-btn.active { background: var(--gold); color: var(--black); }
 .saving-badge { background: rgba(232,131,42,.2); color: var(--amber); font-size: .6rem; padding: .15rem .5rem; border-radius: 100px; margin-left: .4rem; font-weight: 700; }
 
@@ -105,7 +104,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; a
 .features li.off .icon { color: var(--muted); }
 
 .card-footer { display: flex; flex-direction: column; gap: .6rem; margin-top: auto; }
-.btn { display: block; padding: 1rem 2rem; background: linear-gradient(135deg, var(--gold), var(--amber)); color: black; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: .88rem; text-align: center; transition: all .3s; border: none; cursor: none; font-family: 'Plus Jakarta Sans', sans-serif; }
+.btn { display: block; padding: 1rem 2rem; background: linear-gradient(135deg, var(--gold), var(--amber)); color: black; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: .88rem; text-align: center; transition: all .3s; border: none; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; }
 .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(212,168,67,.4); color: black; }
 .btn.outline { background: transparent; border: 1px solid var(--border); color: var(--cream-dim); }
 .btn.outline:hover { border-color: var(--gold); color: var(--gold); }
@@ -189,7 +188,7 @@ footer { background: var(--warm-dark); border-top: 1px solid var(--border); padd
 footer p { font-size: .76rem; color: var(--muted); }
 
 /* REVEAL */
-.reveal { opacity: 0; transform: translateY(28px); transition: all .75s cubic-bezier(.16,1,.3,1); }
+.reveal { opacity: 1; transform: translateY(0); transition: all .75s cubic-bezier(.16,1,.3,1); }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* MOBILE */
@@ -216,14 +215,11 @@ footer p { font-size: .76rem; color: var(--muted); }
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-
 <nav>
   <a class="nav-logo" href="index.html">Lancelot<span>Corp</span></a>
   <div class="nav-right">
     <a class="nav-back" href="index.html">← Retour au site</a>
-    <a class="nav-cta" href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/esteesct/30min'});return false;">📅 Réserver un audit</a>
+    <a class="nav-cta" href="https://calendly.com/esteesct/30min" target="_blank">📅 Réserver un audit</a>
   </div>
 </nav>
 
@@ -300,7 +296,7 @@ footer p { font-size: .76rem; color: var(--muted); }
       <li class="off"><span class="icon">–</span> Pas d'agent IA avancé</li>
     </ul>
     <div class="card-footer">
-      <a class="btn outline" href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/esteesct/30min'});return false;">Commencer — Audit gratuit →</a>
+      <a class="btn outline" href="https://calendly.com/esteesct/30min" target="_blank">Commencer — Audit gratuit →</a>
       <div class="btn-delivery">Livraison garantie <span>sous 1 semaine</span></div>
     </div>
   </div>
@@ -326,7 +322,7 @@ footer p { font-size: .76rem; color: var(--muted); }
       <li><span class="icon">✦</span> 3 mois de support inclus</li>
     </ul>
     <div class="card-footer">
-      <a class="btn" href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/esteesct/30min'});return false;">Demander un audit gratuit →</a>
+      <a class="btn" href="https://calendly.com/esteesct/30min" target="_blank">Demander un audit gratuit →</a>
       <div class="btn-delivery">Livraison garantie <span>sous 2 semaines</span></div>
     </div>
   </div>
@@ -351,7 +347,7 @@ footer p { font-size: .76rem; color: var(--muted); }
       <li><span class="icon">✦</span> Support dédié 12 mois</li>
     </ul>
     <div class="card-footer">
-      <a class="btn outline" href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/esteesct/30min'});return false;">Prendre rendez-vous →</a>
+      <a class="btn outline" href="https://calendly.com/esteesct/30min" target="_blank">Prendre rendez-vous →</a>
       <div class="btn-delivery">Délai <span>selon périmètre</span></div>
     </div>
   </div>
@@ -406,7 +402,7 @@ footer p { font-size: .76rem; color: var(--muted); }
         <div class="abo-price"><span class="amount">700€</span><span class="label">Business / mois</span></div>
         <div class="abo-price"><span class="amount">2 500€</span><span class="label">Enterprise / mois</span></div>
       </div>
-      <a class="btn" href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/esteesct/30min'});return false;" style="display:inline-block;width:auto;">En savoir plus — Audit gratuit →</a>
+      <a class="btn" href="https://calendly.com/esteesct/30min" target="_blank" style="display:inline-block;width:auto;">En savoir plus — Audit gratuit →</a>
     </div>
     <div class="abo-feats">
       <div class="abo-feat">Mises à jour continues</div>
@@ -429,7 +425,7 @@ footer p { font-size: .76rem; color: var(--muted); }
     <div class="testimonial-card reveal">
       <div class="t-icon">🤝</div>
       <p class="t-text">Vous êtes entrepreneur ou dirigeant ? Testez nos solutions et devenez <strong>notre premier client témoignant.</strong></p>
-      <a href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/esteesct/30min'});return false;" class="t-cta">Démarrer maintenant</a>
+      <a href="https://calendly.com/esteesct/30min" target="_blank" class="t-cta">Démarrer maintenant</a>
     </div>
     <div class="testimonial-card reveal">
       <div class="t-icon">⭐</div>
@@ -478,7 +474,7 @@ footer p { font-size: .76rem; color: var(--muted); }
   <h2 class="reveal">Prêt à <em>automatiser</em> ?</h2>
   <p class="reveal">Audit gratuit · Réponse sous 24h · Sans engagement · Livraison en 1-2 semaines</p>
   <div class="cta-btns reveal">
-    <a class="btn" href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/esteesct/30min'});return false;">📅 Réserver mon audit gratuit</a>
+    <a class="btn" href="https://calendly.com/esteesct/30min" target="_blank">📅 Réserver mon audit gratuit</a>
     <a class="btn outline" href="index.html#contact">Envoyer un message →</a>
   </div>
 </div>
@@ -491,15 +487,15 @@ footer p { font-size: .76rem; color: var(--muted); }
 <script>
 /* CURSOR */
 const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-document.addEventListener('mousemove', e => {
-  cursor.style.left = e.clientX+'px'; cursor.style.top = e.clientY+'px';
-  setTimeout(() => { ring.style.left = e.clientX+'px'; ring.style.top = e.clientY+'px'; }, 80);
-});
-document.querySelectorAll('a,button,.card,.profile,.faq-item,.testimonial-card').forEach(el => {
-  el.addEventListener('mouseenter', () => { cursor.style.transform='translate(-50%,-50%) scale(2)'; ring.style.transform='translate(-50%,-50%) scale(1.5)'; });
-  el.addEventListener('mouseleave', () => { cursor.style.transform='translate(-50%,-50%) scale(1)'; ring.style.transform='translate(-50%,-50%) scale(1)'; });
-});
+/* CALENDLY */
+function openCalendly() {
+  if (typeof Calendly !== 'undefined') {
+    Calendly.initPopupWidget({url: 'https://calendly.com/esteesct/30min'});
+  } else {
+    window.open('https://calendly.com/esteesct/30min', '_blank');
+  }
+}
+
 
 /* BILLING TOGGLE */
 const prices = {

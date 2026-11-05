@@ -229,6 +229,48 @@ footer p{font-size:.76rem;color:var(--muted)}
   *,*::before,*::after{animation:none!important;transition:none!important}
   .js .reveal{opacity:1;transform:none}
 }
+
+/* MOBILE MENU (bouton invisible sur PC) */
+.nav-toggle{display:none}
+.scroll-hint{display:none}
+
+/* ===== MOBILE UNIQUEMENT ===== */
+@media(max-width:900px){
+  html{scroll-padding-top:4.5rem}
+  nav{gap:.8rem}
+  .nav-toggle{display:inline-flex;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;padding:0 11px;background:none;border:1px solid var(--border);border-radius:10px;cursor:pointer;flex-shrink:0}
+  .nav-toggle span{display:block;height:2px;background:var(--gold);border-radius:2px;transition:transform .25s,opacity .2s}
+  nav.open .nav-toggle span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  nav.open .nav-toggle span:nth-child(2){opacity:0}
+  nav.open .nav-toggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;background:#0d0b08;border-bottom:1px solid var(--border);padding:.4rem 1.5rem 1.2rem;max-height:calc(100vh - 70px);overflow-y:auto}
+  nav.open .nav-links{display:flex}
+  .nav-links li{border-bottom:1px solid var(--border)}
+  .nav-links li:last-child{border-bottom:0;padding-top:1rem}
+  .nav-links a{display:block;padding:1rem 0;font-size:.9rem}
+  .nav-links a::after{display:none}
+  .nav-links a[onclick]{padding:.9rem 1rem!important;text-align:center;font-size:.9rem}
+}
+@media(hover:none),(max-width:900px){
+  *,body{cursor:auto!important}
+  .cursor,.cursor-ring{display:none!important}
+}
+
+@media(max-width:900px){
+  .nav-rdv{margin-left:auto;display:inline-flex;align-items:center;min-height:40px}
+}
+@media(max-width:768px){
+  h1{font-size:clamp(2rem,9.5vw,2.7rem)!important}
+  h2{font-size:clamp(1.6rem,7vw,2rem)!important}
+  .tier{padding:1.8rem 1.4rem 1.6rem}
+  .tier.featured{padding-top:2.2rem}
+  .scroll-hint{display:block;margin-top:2rem;color:var(--muted);font-size:.78rem;text-align:center}
+  .table-scroll{margin-top:.6rem}
+  th,td{padding:.8rem .9rem}
+  .table-scroll tbody th{position:sticky;left:0;z-index:1;background:var(--warm-card)}
+  .table-scroll tr.group th{position:static}
+  .pioneer .btn-primary,.final .actions a{width:100%}
+}
 </style>
 </head>
 <body>
@@ -238,7 +280,7 @@ footer p{font-size:.76rem;color:var(--muted)}
 
 <nav aria-label="Navigation principale">
   <a class="nav-logo" href="index.html">Lancelot<span>Corp</span></a>
-  <ul class="nav-links">
+  <ul class="nav-links" id="nav-links">
     <li><a href="index.html#services">Services</a></li>
     <li><a href="index.html#process">Comment ça marche</a></li>
     <li><a href="index.html#temoignages">Témoignages</a></li>
@@ -246,6 +288,7 @@ footer p{font-size:.76rem;color:var(--muted)}
     <li><a href="index.html#contact">Contact</a></li>
   </ul>
   <a class="nav-rdv" href="https://calendly.com/esteesct/30min" data-cal>📅 RDV</a>
+  <button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
 </nav>
 
 <header class="page-hero">
@@ -369,6 +412,7 @@ footer p{font-size:.76rem;color:var(--muted)}
       <div class="section-label">Comparatif</div>
       <h2 id="t-comparatif">Les trois formules <em>côte à côte</em></h2>
     </div>
+    <p class="scroll-hint">← Faites défiler le tableau →</p>
     <div class="table-scroll reveal">
       <table>
         <caption class="sr-only">Comparatif des formules Starter, Business et Enterprise</caption>
@@ -407,6 +451,7 @@ footer p{font-size:.76rem;color:var(--muted)}
       <h2 id="t-modele">Forfait ou abonnement : <em>lequel choisir ?</em></h2>
       <p class="intro">Le forfait finance un projet précis. L’abonnement étale le coût et inclut l’évolution de la solution dans le temps. Vous pouvez passer de l’un à l’autre.</p>
     </div>
+    <p class="scroll-hint">← Faites défiler le tableau →</p>
     <div class="table-scroll reveal">
       <table class="compare">
         <caption class="sr-only">Comparatif entre le forfait projet et l’abonnement mensuel</caption>
@@ -589,6 +634,17 @@ footer p{font-size:.76rem;color:var(--muted)}
       el.addEventListener('mouseleave', function () { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.transform = 'translate(-50%,-50%) scale(1)'; });
     });
   }
+})();
+</script>
+<script>
+(function(){
+  var nav=document.querySelector('nav'),t=nav&&nav.querySelector('.nav-toggle');
+  if(!t)return;
+  function set(o){nav.classList.toggle('open',o);t.setAttribute('aria-expanded',o?'true':'false')}
+  t.addEventListener('click',function(){set(!nav.classList.contains('open'))});
+  nav.querySelectorAll('.nav-links a').forEach(function(a){a.addEventListener('click',function(){set(false)})});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)});
+  window.addEventListener('resize',function(){if(window.innerWidth>900)set(false)});
 })();
 </script>
 </body>

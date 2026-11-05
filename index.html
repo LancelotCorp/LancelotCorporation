@@ -238,6 +238,57 @@ body.en span.lang-fr{display:none}
   section{padding:4rem 1.2rem!important}
 }
 
+
+/* MOBILE MENU (bouton invisible sur PC) */
+.nav-toggle{display:none}
+.scroll-hint{display:none}
+
+/* ===== MOBILE UNIQUEMENT ===== */
+@media(max-width:900px){
+  html{scroll-padding-top:4.5rem}
+  nav{gap:.8rem}
+  .nav-toggle{display:inline-flex;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;padding:0 11px;background:none;border:1px solid var(--border);border-radius:10px;cursor:pointer;flex-shrink:0}
+  .nav-toggle span{display:block;height:2px;background:var(--gold);border-radius:2px;transition:transform .25s,opacity .2s}
+  nav.open .nav-toggle span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  nav.open .nav-toggle span:nth-child(2){opacity:0}
+  nav.open .nav-toggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;background:#0d0b08;border-bottom:1px solid var(--border);padding:.4rem 1.5rem 1.2rem;max-height:calc(100vh - 70px);overflow-y:auto}
+  nav.open .nav-links{display:flex}
+  .nav-links li{border-bottom:1px solid var(--border)}
+  .nav-links li:last-child{border-bottom:0;padding-top:1rem}
+  .nav-links a{display:block;padding:1rem 0;font-size:.9rem}
+  .nav-links a::after{display:none}
+  .nav-links a[onclick]{padding:.9rem 1rem!important;text-align:center;font-size:.9rem}
+}
+@media(hover:none),(max-width:900px){
+  *,body{cursor:auto!important}
+  .cursor,.cursor-ring{display:none!important}
+}
+
+@media(max-width:900px){
+  .nav-lang{margin-left:auto}
+  .lang-btn{padding:.55rem .85rem;font-size:.78rem}
+  .hero{min-height:auto;padding:7rem 1.2rem 2.5rem!important;gap:2.5rem}
+  .hero-ctas a{flex:1 1 100%;text-align:center}
+  .hero-stats{position:relative;left:auto;right:auto;bottom:auto;display:grid;grid-template-columns:1fr 1fr}
+  .stat{border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .stat:nth-child(2n){border-right:none}
+  .stat:nth-child(n+3){border-bottom:none}
+  .service-card{padding:1.8rem 1.5rem}
+  .contact-form-wrap{padding:1.6rem 1.3rem}
+  #contact .reveal>p{color:var(--muted);line-height:1.85;margin:1rem 0 2rem;font-size:.98rem}
+  .calendly-inline-widget{min-width:0!important;height:700px!important}
+  #chat-bubble{right:1rem;bottom:1rem;width:56px;height:56px}
+  #chat-window{right:1rem;bottom:5rem;width:calc(100vw - 2rem);height:min(530px,calc(100dvh - 6.5rem))}
+}
+@media(max-width:768px){
+  h1{font-size:clamp(2rem,9.5vw,2.7rem)!important}
+  h2{font-size:clamp(1.6rem,7vw,2rem)!important}
+  #chat-input,.form-group input,.form-group textarea,.form-group select{font-size:16px}
+}
+@media(max-width:560px){
+  .process-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -247,7 +298,7 @@ body.en span.lang-fr{display:none}
 
 <nav>
   <div class="nav-logo">Lancelot<span>Corp</span></div>
-  <ul class="nav-links">
+  <ul class="nav-links" id="nav-links">
     <li><a href="#services"><span class="lang-fr">Services</span><span class="lang-en">Services</span></a></li>
     <li><a href="#process"><span class="lang-fr">Comment ça marche</span><span class="lang-en">How it works</span></a></li>
     <li><a href="#temoignages"><span class="lang-fr">Témoignages</span><span class="lang-en">Testimonials</span></a></li>
@@ -259,6 +310,7 @@ body.en span.lang-fr{display:none}
     <button class="lang-btn active" onclick="setLang('fr')">FR</button>
     <button class="lang-btn" onclick="setLang('en')">EN</button>
   </div>
+  <button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button>
 </nav>
 
 <!-- HERO -->
@@ -672,5 +724,16 @@ console.log("Google Analytics prêt à connecter");
 
 
 
+<script>
+(function(){
+  var nav=document.querySelector('nav'),t=nav&&nav.querySelector('.nav-toggle');
+  if(!t)return;
+  function set(o){nav.classList.toggle('open',o);t.setAttribute('aria-expanded',o?'true':'false')}
+  t.addEventListener('click',function(){set(!nav.classList.contains('open'))});
+  nav.querySelectorAll('.nav-links a').forEach(function(a){a.addEventListener('click',function(){set(false)})});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)});
+  window.addEventListener('resize',function(){if(window.innerWidth>900)set(false)});
+})();
+</script>
 </body>
 </html>

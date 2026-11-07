@@ -196,7 +196,7 @@ body.en span.lang-fr{display:none}
 .chat-messages{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.8rem;scrollbar-width:thin;scrollbar-color:rgba(212,168,67,.2) transparent}
 .msg{max-width:85%;padding:.75rem 1rem;border-radius:14px;font-size:.84rem;line-height:1.55;animation:msgIn .25s ease}
 @keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.msg.bot{background:var(--warm-card2);color:var(--cream);border-bottom-left-radius:4px;align-self:flex-start;border:1px solid var(--border)}
+.msg.bot{white-space:pre-wrap;background:var(--warm-card2);color:var(--cream);border-bottom-left-radius:4px;align-self:flex-start;border:1px solid var(--border)}
 .msg.user{background:linear-gradient(135deg,var(--gold),var(--amber));color:var(--black);border-bottom-right-radius:4px;align-self:flex-end;font-weight:500}
 .msg.typing{background:var(--warm-card2);align-self:flex-start;border:1px solid var(--border)}
 .typing-dots{display:flex;gap:4px;align-items:center}
@@ -497,20 +497,20 @@ body.en span.lang-fr{display:none}
         <div class="form-row">
           <div class="form-group">
             <label class="lang-fr">Prénom</label><label class="lang-en">First name</label>
-            <input type="text" placeholder="Jean">
+            <input type="text" name="prenom" placeholder="Jean" required autocomplete="given-name">
           </div>
           <div class="form-group">
             <label class="lang-fr">Nom</label><label class="lang-en">Last name</label>
-            <input type="text" placeholder="Dupont">
+            <input type="text" name="nom" placeholder="Dupont" autocomplete="family-name">
           </div>
         </div>
         <div class="form-group">
           <label>Email</label>
-          <input type="email" placeholder="jean@entreprise.com">
+          <input type="email" name="email" placeholder="jean@entreprise.com" required autocomplete="email">
         </div>
         <div class="form-group">
           <label class="lang-fr">Service souhaité</label><label class="lang-en">Desired service</label>
-          <select>
+          <select name="service">
             <option>Bot Telegram / WhatsApp</option>
             <option>Agent IA connecté</option>
             <option>Automatisation de tâches</option>
@@ -520,7 +520,7 @@ body.en span.lang-fr{display:none}
         </div>
         <div class="form-group">
           <label class="lang-fr">Votre besoin</label><label class="lang-en">Your need</label>
-          <textarea placeholder="Décrivez ce que vous souhaitez automatiser..."></textarea>
+          <textarea name="besoin" placeholder="Décrivez ce que vous souhaitez automatiser..." required></textarea>
         </div>
         <button type="submit" class="form-submit">
           <span class="lang-fr">Envoyer ma demande →</span>
@@ -578,6 +578,7 @@ Tarifs, en euros hors taxes et indicatifs. Le prix exact est fixé par un devis 
 - Les frais d'API et d'hébergement sont en plus, facturés au coût réel (souvent 20 à 200 €/mois pour une PME).
 - L'abonnement n'a pas de frais de mise en place et se résilie avec 30 jours de préavis.
 - Programme clients pionniers : 20 % de remise pour les 5 premiers clients Starter ou Business, en échange d'une étude de cas.
+Style : écris en texte simple, sans aucune mise en forme Markdown. N'utilise jamais d'astérisques, de dièses, de tirets de liste, de gras, de titres ni de tableaux. Fais de courtes phrases ou de courts paragraphes, et sépare les idées par des retours à la ligne. Tu peux utiliser quelques émojis avec parcimonie.
 Règles : présente ces tarifs comme des fourchettes indicatives, ne promets aucun résultat chiffré, n'invente aucun tarif, délai ou condition absent de cette liste, et renvoie vers l'audit gratuit pour un prix précis. L'équipe répond sous 24 h ouvrées.
 Ton rôle : répondre aux questions ET collecter le prénom, le besoin et l'email du visiteur.
 Quand tu as collecté le prénom + besoin + email, dis EXACTEMENT à la fin de ton message : "PROSPECT_COLLECTÉ|prénom|besoin|email"
@@ -609,6 +610,18 @@ Tu peux aussi proposer au visiteur de réserver un appel directement : <a href="
     }
   }
 
+  function cleanText(t) {
+    return t
+      .replace(/```[a-z]*\n?/gi, '')
+      .replace(/^\s{0,3}#{1,6}\s+/gm, '')
+      .replace(/^\s*[*\-+•]\s+/gm, '')
+      .replace(/(\*\*|__)(.*?)\1/gs, '$2')
+      .replace(/(^|[^*])\*(?!\s)([^*\n]+?)\*(?!\*)/g, '$1$2')
+      .replace(/[*`#]/g, '')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  }
+
   function addBotMessage(text) {
     const msgs = document.getElementById('chat-messages');
     if (text.includes('PROSPECT_COLLECTÉ|') && !emailSent) {
@@ -618,6 +631,7 @@ Tu peux aussi proposer au visiteur de réserver un appel directement : <a href="
       emailSent = true;
     }
     const div = document.createElement('div');
+    text = cleanText(text);
     div.className = 'msg bot'; div.textContent = text;
     msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
     chatHistory.push({role:'assistant',content:text});
@@ -666,10 +680,13 @@ Tu peux aussi proposer au visiteur de réserver un appel directement : <a href="
       });
       const data = await res.json();
       hideTyping();
-      addBotMessage(data.choices?.[0]?.message?.content || "Désolée, problème technique. Contactez-nous via le formulaire ! 🙏");
+      var reply = data.choices?.[0]?.message?.content;
+      if (!reply) console.error('Alice : réponse API invalide', res.status, data);
+      addBotMessage(reply || "Désolée, je rencontre un souci technique. Réservez un audit gratuit avec le bouton RDV ou écrivez à esteesct@gmail.com, nous répondons sous 24 h ouvrées. 🙏");
     } catch(e) {
       hideTyping();
-      addBotMessage("Désolée, problème de connexion. Utilisez le formulaire de contact ! 🙏");
+      console.error('Alice : appel /api/chat impossible', e);
+      addBotMessage("Désolée, problème de connexion. Utilisez le formulaire de contact ou écrivez à esteesct@gmail.com. 🙏");
     }
   }
 
@@ -688,10 +705,27 @@ Tu peux aussi proposer au visiteur de réserver un appel directement : <a href="
 
   function handleSubmit(e) {
     e.preventDefault();
-    const btn = e.target.querySelector('.form-submit');
-    btn.textContent = '✓ Message envoyé !';
-    btn.style.background = 'linear-gradient(135deg,#2d6a4f,#40916c)';
-    btn.style.color = '#fff';
+    var f = e.target, btn = f.querySelector('.form-submit'), original = btn.innerHTML;
+    if (btn.disabled) return;
+    var prenom = f.elements.prenom.value.trim(), nom = f.elements.nom.value.trim();
+    var params = {
+      name: (prenom + ' ' + nom).trim(),
+      email: f.elements.email.value.trim(),
+      message: '[Formulaire du site] Service : ' + f.elements.service.value + '\n\n' + f.elements.besoin.value.trim()
+    };
+    btn.disabled = true; btn.textContent = 'Envoi en cours…';
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params).then(function () {
+      btn.textContent = '✓ Message envoyé !';
+      btn.style.background = 'linear-gradient(135deg,#2d6a4f,#40916c)';
+      btn.style.color = '#fff';
+      f.reset();
+      setTimeout(function () { btn.innerHTML = original; btn.style.background = ''; btn.style.color = ''; btn.disabled = false; }, 8000);
+    }).catch(function (err) {
+      console.error('Formulaire : envoi impossible', err);
+      btn.textContent = 'Échec de l’envoi — écrivez-nous : esteesct@gmail.com';
+      btn.style.background = '#8a3b2e'; btn.style.color = '#fff';
+      setTimeout(function () { btn.innerHTML = original; btn.style.background = ''; btn.style.color = ''; btn.disabled = false; }, 6000);
+    });
   }
 </script>
 

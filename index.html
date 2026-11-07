@@ -578,11 +578,12 @@ Tarifs, en euros hors taxes et indicatifs. Le prix exact est fixé par un devis 
 - Les frais d'API et d'hébergement sont en plus, facturés au coût réel (souvent 20 à 200 €/mois pour une PME).
 - L'abonnement n'a pas de frais de mise en place et se résilie avec 30 jours de préavis.
 - Programme clients pionniers : 20 % de remise pour les 5 premiers clients Starter ou Business, en échange d'une étude de cas.
-Style : écris en texte simple, sans aucune mise en forme Markdown. N'utilise jamais d'astérisques, de dièses, de tirets de liste, de gras, de titres ni de tableaux. Fais de courtes phrases ou de courts paragraphes, et sépare les idées par des retours à la ligne. Tu peux utiliser quelques émojis avec parcimonie.
-Règles : présente ces tarifs comme des fourchettes indicatives, ne promets aucun résultat chiffré, n'invente aucun tarif, délai ou condition absent de cette liste, et renvoie vers l'audit gratuit pour un prix précis. L'équipe répond sous 24 h ouvrées.
+Style : écris en texte simple, sans aucune mise en forme Markdown. N'utilise jamais d'astérisques, de dièses, de tirets de liste, de gras, de titres ni de tableaux. Fais de courtes phrases ou de courts paragraphes, et sépare les idées par des retours à la ligne. N'utilise ni flèches, ni lignes de tirets, ni code HTML. Tu peux utiliser quelques émojis avec parcimonie.
+Quand on te demande les tarifs, présente TOUJOURS les trois formules (Starter, Business, Enterprise), une courte phrase chacune avec le prix en forfait et en abonnement, puis demande au visiteur quel est son besoin pour l'orienter. Ne présente jamais une seule formule seule, sauf si le visiteur a précisé laquelle l'intéresse. Garde des réponses courtes, huit lignes au maximum.
+Règles : n'invente aucun exemple de client, de cas réalisé, de référence ni de témoignage, car LancelotCorporation n'a pas encore de clients publiés. Tu peux décrire ce qu'une solution permet de faire, sans prétendre qu'elle a déjà été réalisée pour quelqu'un. Présente ces tarifs comme des fourchettes indicatives, ne promets aucun résultat chiffré, n'invente aucun tarif, délai ou condition absent de cette liste, et renvoie vers l'audit gratuit pour un prix précis. L'équipe répond sous 24 h ouvrées.
 Ton rôle : répondre aux questions ET collecter le prénom, le besoin et l'email du visiteur.
 Quand tu as collecté le prénom + besoin + email, dis EXACTEMENT à la fin de ton message : "PROSPECT_COLLECTÉ|prénom|besoin|email"
-Tu peux aussi proposer au visiteur de réserver un appel directement : <a href="" onclick="Calendly.initPopupWidget({url:'https://calendly.com/esteesct/30min'});return false;" style="color:var(--gold);font-weight:600">📅 Réserver un audit gratuit</a>. Réponds en français par défaut.`;
+Quand tu proposes de réserver l'audit gratuit, termine ton message par le code [[RDV]] : le site le transforme en bouton. Réponds en français par défaut.`;
 
   let chatHistory = [];
   let emailSent = false;
@@ -612,7 +613,11 @@ Tu peux aussi proposer au visiteur de réserver un appel directement : <a href="
 
   function cleanText(t) {
     return t
+      .replace(/<a\b[^>]*>(.*?)<\/a>/gis, '$1')
+      .replace(/<\/?[a-z][^>]*>/gi, '')
       .replace(/```[a-z]*\n?/gi, '')
+      .replace(/-{3,}/g, '')
+      .replace(/\s*[↔⇄⇒→]\s*/g, ' / ')
       .replace(/^\s{0,3}#{1,6}\s+/gm, '')
       .replace(/^\s*[*\-+•]\s+/gm, '')
       .replace(/(\*\*|__)(.*?)\1/gs, '$2')
@@ -632,7 +637,16 @@ Tu peux aussi proposer au visiteur de réserver un appel directement : <a href="
     }
     const div = document.createElement('div');
     text = cleanText(text);
+    var wantsBtn = text.indexOf('[[RDV]]') !== -1;
+    text = text.replace(/\s*\[\[RDV\]\]\s*/g, '\n').trim();
     div.className = 'msg bot'; div.textContent = text;
+    if (wantsBtn) {
+      var bt = document.createElement('button');
+      bt.type = 'button'; bt.className = 'suggestion'; bt.style.cssText = 'display:block;margin-top:.7rem';
+      bt.textContent = '📅 Réserver un audit gratuit';
+      bt.onclick = function () { Calendly.initPopupWidget({url:'https://calendly.com/esteesct/30min'}); };
+      div.appendChild(bt);
+    }
     msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
     chatHistory.push({role:'assistant',content:text});
   }

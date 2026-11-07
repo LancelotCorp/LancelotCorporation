@@ -36,7 +36,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: process.env.ANTHROPIC_MODEL || 'claude-haiku-4-5',
-        max_tokens: 500,
+        max_tokens: 700,
         temperature: 0.7,
         system,
         messages
